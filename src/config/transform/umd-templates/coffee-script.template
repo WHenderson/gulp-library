@@ -1,0 +1,8 @@
+<%
+  for (var i = 0; i != dependencies.length; ++i) {
+    %><%= dependencies[i].param %> = require('<%= dependencies[i].cjs || dependencies[i].name %>')
+<%
+  }
+%>
+<%= contents %>
+module.exports = <%= exports %>
