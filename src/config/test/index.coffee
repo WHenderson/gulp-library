@@ -8,10 +8,19 @@ module.exports = {
 
   mocha: {
     debugBrk: false
-    r: path.join(__dirname, '../../task/test/setup/coverage-setup.js')
     R: 'spec'
     u: 'tdd'
-    istanbul: {
-    }
+    istanbul: false
   }
+
+  mochaCoverage: {
+    r: path.join(__dirname, '../../task/test/setup/coverage-setup.js')
+    istanbul: {}
+  }
+
+  mochaExamples: {
+    r: path.join(__dirname, '../../task/test/setup/examples-setup.js')
+    istanbul: false
+  }
+
 }

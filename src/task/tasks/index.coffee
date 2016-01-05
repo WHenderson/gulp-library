@@ -17,7 +17,7 @@ module.exports = (tasks, prefix) ->
     chainedName = "#{prefix}chained-#{index}-#{name}"
     lib.gulp.task(discreteName, task)
     lib.gulp.task(chainedName, dep, task)
-    dep = [discreteName]
+    dep = [chainedName]
     ++index
 
   return

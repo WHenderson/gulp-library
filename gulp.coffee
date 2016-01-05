@@ -15,6 +15,10 @@ tasks = {
 
   testCoverage: () ->
     all.task.test.coverage()
+
+  testExamples: () ->
+    all.task.test.examples()
+
 }
 
 all.task.tasks(tasks)
