@@ -1,7 +1,7 @@
 all = require('./src')
 
 all.config.output.dist = 'lib'
-all.task.transpile.cson = false
+all.pipe.transpile.cson = false
 
 tasks = {
   clean: () ->
@@ -10,7 +10,7 @@ tasks = {
   transpile: () ->
     all.lib.gulp
     .src('src/**/*')
-    .pipe(all.task.transpile())
+    .pipe(all.pipe.transpile())
     .pipe(all.lib.gulp.dest(all.config.output.dist))
 
   testCoverage: () ->
