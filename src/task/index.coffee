@@ -4,5 +4,6 @@ module.exports = {
   lint: require('./lint')
   transpile: require('./transpile')
   umd: require('./umd')
+  test: require('./test')
   tasks: require('./tasks')
 }

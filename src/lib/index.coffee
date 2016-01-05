@@ -6,4 +6,5 @@ module.exports = {
   lint: require('./lint')
   transform: require('./transform')
   util: require('./util')
+  test: require('./test')
 }
