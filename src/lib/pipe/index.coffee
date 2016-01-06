@@ -4,4 +4,5 @@ module.exports = {
   ignore: require('gulp-ignore')
   lazypipe: require('lazypipe')
   mirror: require('gulp-mirror')
+  through2Map: require('through2-map')
 }

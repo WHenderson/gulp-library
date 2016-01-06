@@ -3,4 +3,5 @@ module.exports = {
   copy: require('./copy')
   test: require('./test')
   tasks: require('./tasks')
+  coffeeCoverage: require('./coffeeCoverage')
 }

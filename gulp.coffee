@@ -9,17 +9,28 @@ tasks = {
   clean: () ->
     all.task.clean()
 
-  build: () ->
-    all.pipe.transpile.cson = false
-    all.pipe.transpile.jade = false
+  _build: (coffeeCoverage, dest) ->
+    dest ?= all.config.output.dist
 
     all.lib.gulp
     .src('src/**/*')
-    .pipe(all.pipe.transpile())
-    .pipe(all.lib.gulp.dest(all.config.output.dist))
-    .on('finish', () ->
-      all.pipe.transpile.cson = '*.cson'
-      all.pipe.transpile.jade = '*.jade'
+    .pipe(all.pipe.transpile({
+      cson: false
+      jade: false
+      coffeeCoverage: coffeeCoverage
+    }))
+    .pipe(all.lib.gulp.dest(dest))
+
+  build: () ->
+    tasks._build(false)
+
+  buildCoverage: () ->
+    tasks._build(
+      {
+        initfile: 'build/coverage.js'
+        verbose: true
+      }
+      'build/coverage'
     )
 
   testCoverage: () ->
@@ -30,6 +41,11 @@ tasks = {
 
   cleanPhantom: () ->
     all.task.clean('build/phantomjs')
+
+  _buildPhantom: () ->
+    all.lib.gulp
+    .src('test/phantomjs/*.{jade|coffee|js}')
+
 
   buildPhantom: () ->
     all.lib.gulp

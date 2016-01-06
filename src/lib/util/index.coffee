@@ -8,4 +8,10 @@ module.exports = {
   glob: require('glob')
 
   bower: require('bower')
+
+  coffeeCoverage: require('coffee-coverage')
+
+  mkdirp: require('mkdirp')
+
+  util: require('gulp-util')
 }
