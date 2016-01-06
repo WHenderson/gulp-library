@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/WHenderson/gulp-library#readme",
   "dependencies": {
+    "bower": "^1.7.2",
     "chai": "^3.4.1",
     "coffee-coverage": "^0.7.0",
     "cson": "^3.0.2",

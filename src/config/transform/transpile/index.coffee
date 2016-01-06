@@ -7,6 +7,9 @@ module.exports = {
   }
   jade: {
     pretty: true
+    data: {
+      jadeMochaTemplate: path.join(__dirname, '../../task/test/templates/mocha.jade')
+    }
   }
   cson: {
 

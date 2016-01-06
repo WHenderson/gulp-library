@@ -8,6 +8,7 @@
 # built libs - need to include for bower. yuk!
 /dist
 /lib
+/build
 
 # IDE
 /.idea

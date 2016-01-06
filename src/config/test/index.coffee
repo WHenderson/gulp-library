@@ -23,4 +23,11 @@ module.exports = {
     istanbul: false
   }
 
+  bowerPhantomJs: {
+    name: 'test-phantomjs'
+    dependencies: {
+      mocha: "~2.3.4"
+      chai: "~3.4.2"
+    }
+  }
 }

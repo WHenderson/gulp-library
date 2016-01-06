@@ -6,4 +6,6 @@ module.exports = {
   chai: require('chai')
 
   glob: require('glob')
+
+  bower: require('bower')
 }
