@@ -31,40 +31,43 @@ umdUmd = lib.pipe.lazypipe()
   suffix: '.umd'
 })
 
-module.exports = (apply, params) ->
+module.exports = (options) ->
+  options ?= {}
+
   lib.pipe.lazypipe()
   .pipe -> lib.pipe.if(
     '*.coffee'
     (
       lib.pipe.lazypipe()
-      .pipe -> lib.pipe.if(apply, lib.metadata.rename({
+      .pipe -> lib.pipe.if(options.params?, lib.metadata.rename({
         suffix: '.apply'
       }))
       .pipe -> lib.pipe.mirror(
         module.exports.coffeeScript()
         (
           lib.pipe.lazypipe()
-          .pipe -> transpile()
-          .pipe -> module.exports(apply, params)
+          .pipe -> transpile(options.transpile)
+          .pipe -> module.exports(options.params)
         )()
         (
           lib.pipe.lazypipe()
-          .pipe -> lib.pipe.ignore.exclude(not apply)
-          .pipe -> lib.pipe.if(apply, lib.metadata.rename({
+          .pipe -> lib.pipe.ignore.exclude(not options.params?)
+          .pipe -> lib.pipe.if(options.params?, lib.metadata.rename({
             suffix: '.applied'
           }))
-          .pipe -> lib.metadata.data((file) ->
-            file.data.dependencies = (dep for dep in file.data.dependencies when params.indexOf(dep.param ? dep.name) != -1)
-            return file.data
-          )
           .pipe -> lib.transform.insert.transform((contents, file) ->
             contents + """
 
-            #{file.data.exports}(#{params.join(', ')})
+            #{file.data.exports}(#{options.params.join(', ')})
 
             """
           )
-          .pipe -> module.exports(apply, params)
+          .pipe -> lib.metadata.data((file) ->
+            #file.data.dependencies = (dep for dep in file.data.dependencies when options.params.indexOf(dep.param ? dep.name) != -1)
+            file.data.namespace = file.data.exports = options.params[0]
+            return file.data
+          )
+          .pipe -> module.exports()
         )()
       )
     )()

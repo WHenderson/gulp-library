@@ -17,7 +17,6 @@ module.exports = (base, spec, name) ->
 
   suite(name, () ->
     for fileName in fileNames when not isRedundant(fileName)
-      console.log(fileName)
       test(path.relative(base, fileName), () ->
         require(fileName)
       )

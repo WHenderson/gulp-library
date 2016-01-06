@@ -4,4 +4,5 @@ module.exports = {
   pipe: require('./pipe')
   task: require('./task')
   test: require('./test')
+  util: require('./util')
 }

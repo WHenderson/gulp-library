@@ -5,4 +5,6 @@ module.exports = {
   lazypipe: require('lazypipe')
   mirror: require('gulp-mirror')
   through2Map: require('through2-map')
+  sort: require('gulp-sort')
+  concat: require('gulp-concat')
 }

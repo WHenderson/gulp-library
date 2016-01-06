@@ -26,7 +26,6 @@ module.exports = (base, spec, name) ->
 
     fileNames = lib.util.glob.sync(path.join(base, spec), {})
     for fileName in fileNames
-      console.log(fileName)
       suite(path.relative(base, fileName), () ->
         require(fileName)
       )
