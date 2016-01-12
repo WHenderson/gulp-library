@@ -1,1 +1,6 @@
-require('../index').test.coverage(__dirname)
+require('../index').test.coverage({
+  globals: {
+    library: '../build/coverage'
+  }
+  base: __dirname
+})
