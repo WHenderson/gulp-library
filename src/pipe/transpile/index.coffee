@@ -32,7 +32,7 @@ module.exports = (options) ->
     .pipe -> lib.pipe.if(
       options.coffeeScript,
       lib.pipe.if(
-        options.coffeeCoverage?
+        options.coffeeCoverage
         coffeeCoverage(options.coffeeCoverage)
         lib.transform.transpile.coffeeScript(config.transform.transpile.coffeeScript)
       )
