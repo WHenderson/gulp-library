@@ -1,54 +1,68 @@
 lib = require('../../lib')
 config = require('../../config')
 util = require('../../util')
-
+transpile = require('../transpile')
 
 module.exports = util.lazyTask(
   {
-    apply: null
+    isPlugin: false
+    umd: {}
     umdCoffeeScript: {}
     umdNode: {}
     umdWeb: {}
     umdUmd: {}
+    transpile: {}
   }
   (options) ->
     lib.pipe.lazypipe()
     .pipe -> lib.pipe.if(
-      config.glob.coffee
-      ( # coffee file
+      config.glob.coffeeScript
+      (
         lib.pipe.lazypipe()
         .pipe -> lib.pipe.if(
-          options.apply == true
-          (
-            lib.pipe.lazypipe()
-            lib.metadata.rename({
-              suffix: '.apply'
-            })
-          )
-        )
-        .pipe -> lib.pipe.if(
-          options.apply == false
-          (
-            lib.pipe.lazypipe()
-            lib.metadata.rename({
-              suffix: '.applied'
-            })
-            .pipe -> lib.transform.insert.transform((contents, file) ->
-              contents + """
-              #{file.data.exports}(#{options.params.join(', ')})
-              """
-            )
+          options.isPlugin
+          lib.pipe.mirror(
+            (
+              lib.pipe.lazypipe()
+              .pipe -> lib.metadata.rename({
+                suffix: '.apply'
+              })
+            )()
+            (
+              lib.pipe.lazypipe()
+              .pipe -> lib.metadata.rename({
+                suffix: '.applied'
+              })
+              .pipe -> lib.transform.insert.transform((contents, file) ->
+                contents + """
+                #{file.data.exports}(#{options.params.join(', ')})
+                """
+              )
+              .pipe -> lib.metadata.data((file) ->
+                file.data.exports = file.data.namespace = file.data.dependencies[0].param ? file.data.dependencies[0].name
+                return file.data
+              )
+            )()
           )
         )
         .pipe -> lib.pipe.mirror(
-          module.exports.umdCoffeeScript(options.umdCoffeeScript)
-          module.exports(lib.util.extend(options, { apply: null }))
+          module.exports.umdCoffeeScript(options.umd, options.umdCoffeeScript)
+          (
+            lib.pipe.lazypipe()
+            .pipe -> transpile(options.transpile, { coffeeCoverage: null })
+            .pipe -> module.exports(options)
+          )()
+          (
+            lib.pipe.lazypipe()
+            .pipe -> transpile(options.transpile, { coffeeScript: null })
+            .pipe -> module.exports(options)
+          )()
         )
-      )
-      ( # non coffee file
-        module.exports.umdNode(options.umdNode)
-        module.exports.umdWeb(options.umdWeb)
-        module.exports.umdUmd(options.umdUmd)
+      )()
+      lib.pipe.mirror(
+        module.exports.umdNode(options.umd, options.umdNode)
+        module.exports.umdWeb(options.umd, options.umdWeb)
+        module.exports.umdUmd(options.umd, options.umdUmd)
       )
     )
 )

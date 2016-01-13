@@ -10,7 +10,7 @@ module.exports = (spec, options) ->
   options = {}
 
   name = util.loadPackageJson(options.packageJson)
-  id = if options.apply then name2id('apply-' + name) else name2id(name)
+  id = if options.isPlugin then name2id('apply-' + name) else name2id(name)
 
   umdOptions = lib.util.extend(
     {}
