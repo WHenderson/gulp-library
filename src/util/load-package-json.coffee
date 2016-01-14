@@ -1,5 +1,7 @@
 fs = require('fs')
 path = require('path')
 
-module.exports = (name='package.json') ->
-  return JSON.parse(fs.readFileSync(name, 'utf8'))
+findPackageRoot = require('./find-package-root')
+
+module.exports = (base = __dirname, name = 'package.json') ->
+  return JSON.parse(fs.readFileSync(path.join(findPackageRoot(base, name), name), 'utf8'))
