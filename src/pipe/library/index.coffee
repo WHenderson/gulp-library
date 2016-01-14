@@ -2,6 +2,7 @@ lib = require('../../lib')
 config = require('../../config')
 util = require('../../util')
 umd = require('../umd')
+sort = require('../sort')
 
 formatName = (name) ->
   name.replace(/-(.)/, (match, x) -> x.toUpperCase())
@@ -14,6 +15,7 @@ module.exports = util.lazyTask(
     namespace: undefined
     isPlugin: undefined
     umd: {}
+    sort: {}
   }
   (options) ->
     name ?= util.loadPackageJson().name
@@ -21,6 +23,7 @@ module.exports = util.lazyTask(
     options.namespace ?= options.exports
 
     return lib.pipe.lazypipe()
+    .pipe -> sort(options.sort)
     .pipe -> lib.pipe.concat("#{name}.coffee")
     .pipe -> lib.metadata.data((file) ->
       file.data ?= {}
