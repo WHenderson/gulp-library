@@ -112,4 +112,4 @@ tasks = {
     }))
 }
 
-all.task.tasks(tasks)
+all.task.exportTasks(tasks)
