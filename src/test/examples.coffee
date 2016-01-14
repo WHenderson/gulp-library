@@ -1,5 +1,6 @@
 path = require('path')
 lib = require('../lib')
+util = require('../util')
 
 module.exports = util.fnOption(
   {

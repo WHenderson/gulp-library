@@ -18,7 +18,7 @@ module.exports = util.fnOptionLazyPipe(
     sort: {}
   }
   (options) ->
-    name ?= util.loadPackageJson().name
+    options.name ?= util.loadPackageJson().name
     options.exports ?= formatName(name)
     options.namespace ?= options.exports
 
