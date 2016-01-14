@@ -1,36 +1,43 @@
 lib = require('../lib')
 config = require('../config')
 path = require('path')
+util = require('../util')
 
 global.assert = require('chai').assert
 
-module.exports = (options) ->
-  options ?= {}
-  options.name ?= options.spec ? 'coverage'
-  options.spec ?= path.join(options.name, '*.{js,coffee}')
-  options.globals = lib.util.extend({}, config.test.globals, options.globals)
-  options.globalsDebug = lib.util.extend({}, config.test.globalsDebug, options.globalsDebug)
+module.exports = util.fnOption(
+  {
+    name: 'coverage'
+    spec: undefined
+    globals: config.globals
+    globalsDebug: config.globalsDebug
+  }
+  (options) ->
+    options.spec ?= path.join(options.name, '*.{js,coffee}')
 
-  suite(options.name, () ->
-    setup(() ->
-      @timeout(100000)
-      globals = lib.util.extend({}, options.globals)
-      if typeof v8debug == 'object'
-        globals = lib.util.extend(globals, options.globalsDebug)
+    suite(options.name, () ->
+      setup(() ->
+        @timeout(25*1000)
+        globals = lib.util.extend({}, options.globals)
+        if typeof v8debug == 'object'
+          globals = lib.util.extend(globals, options.globalsDebug)
 
-      for own name, filePath of globals
-        if (filePath[0] == '.')
-          global[name] = require(path.join(options.base, filePath))
-        else
-          global[name] = require(filePath)
+        for own name, filePath of globals
+          if not filePath?
+            continue
+          if (filePath[0] == '.')
+            global[name] = require(path.join(options.base, filePath))
+          else
+            global[name] = require(filePath)
 
-      return
-    )
-
-    fileNames = lib.util.glob.sync(path.join(options.base, options.spec), {})
-    for fileName in fileNames
-      suite(path.relative(options.base, fileName), () ->
-        require(fileName)
+        return
       )
 
-  )
+      fileNames = lib.util.glob.sync(path.join(options.base, options.spec), {})
+      for fileName in fileNames
+        suite(path.relative(options.base, fileName), () ->
+          require(fileName)
+        )
+
+    )
+)
