@@ -55,6 +55,9 @@ module.exports = util.fnOptionLazyPipe(
           (
             lib.pipe.lazypipe()
             .pipe -> transpile(options.transpile, { coffeeScript: null })
+            .pipe -> lib.metadata.rename({
+              suffix: '.coverage'
+            })
             .pipe -> module.exports(options)
           )()
         )
