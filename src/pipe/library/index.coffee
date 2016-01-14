@@ -5,7 +5,7 @@ umd = require('../umd')
 sort = require('../sort')
 
 formatName = (name) ->
-  name.replace(/-(.)/, (match, x) -> x.toUpperCase())
+  name.replace(/-([a-zA-Z0-9])/g, (match, ch) -> ch.toUpperCase()).replace(/\W/g, '')
 
 module.exports = util.lazyTask(
   {
