@@ -11,9 +11,11 @@ module.exports = util.fnOption(
     spec: undefined
     globals: config.globals
     globalsDebug: config.globalsDebug
+    base: undefined
   }
   (options) ->
     options.spec ?= path.join(options.name, '*.{js,coffee}')
+    packageRoot = util.findPackageRoot()
 
     suite(options.name, () ->
       setup(() ->
@@ -26,7 +28,7 @@ module.exports = util.fnOption(
           if not filePath?
             continue
           if (filePath[0] == '.')
-            global[name] = require(path.join(options.base, filePath))
+            global[name] = require(path.join(packageRoot, filePath))
           else
             global[name] = require(filePath)
 
