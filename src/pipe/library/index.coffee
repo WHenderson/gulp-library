@@ -7,7 +7,7 @@ sort = require('../sort')
 formatName = (name) ->
   name.replace(/-([a-zA-Z0-9])/g, (match, ch) -> ch.toUpperCase()).replace(/\W/g, '')
 
-module.exports = util.lazyTask(
+module.exports = util.fnOptionLazyPipe(
   {
     name: undefined
     dependencies: []

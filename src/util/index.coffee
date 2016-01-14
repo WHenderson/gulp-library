@@ -1,5 +1,6 @@
 module.exports = {
   loadPackageJson: require('./load-package-json')
   mergeOptions: require('./merge-options')
-  lazyTask: require('./lazy-task')
+  fnOptionLazyPipe: require('./fn-option-lazy-pipe')
+  fnOption: require('./fn-option')
 }

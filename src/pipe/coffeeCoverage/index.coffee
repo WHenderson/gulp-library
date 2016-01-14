@@ -5,7 +5,7 @@ fs = require('fs')
 process = require('process')
 path = require('path')
 
-module.exports = util.lazyTask(
+module.exports = util.fnOptionLazyPipe(
   config.coffeeScript
   config.coffeeCoverage
   (options) ->

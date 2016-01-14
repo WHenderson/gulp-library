@@ -3,7 +3,7 @@ config = require('../../config')
 util = require('../../util')
 coffeeCoverage = require('../coffeeCoverage')
 
-module.exports = util.lazyTask(
+module.exports = util.fnOptionLazyPipe(
   {
     jade: {
       data: {

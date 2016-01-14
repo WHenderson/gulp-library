@@ -2,7 +2,7 @@ lib = require('../../lib')
 config = require('../../config')
 util = require('../../util')
 
-module.exports = util.lazyTask(
+module.exports = util.fnOptionLazyPipe(
   config.lintCoffeeScript,
   (options) ->
     lib.pipe.lazypipe()

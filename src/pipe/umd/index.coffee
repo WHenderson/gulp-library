@@ -3,7 +3,7 @@ config = require('../../config')
 util = require('../../util')
 transpile = require('../transpile')
 
-module.exports = util.lazyTask(
+module.exports = util.fnOptionLazyPipe(
   {
     isPlugin: false
     umd: {}
@@ -67,7 +67,7 @@ module.exports = util.lazyTask(
     )
 )
 
-module.exports.umdCoffeeScript = util.lazyTask(
+module.exports.umdCoffeeScript = util.fnOptionLazyPipe(
   {
     umd: config.umd
   }
@@ -91,7 +91,7 @@ module.exports.umdCoffeeScript = util.lazyTask(
 )
 
 
-module.exports.umdNode = util.lazyTask(
+module.exports.umdNode = util.fnOptionLazyPipe(
   {
     umd: config.umd
   }
@@ -109,7 +109,7 @@ module.exports.umdNode = util.lazyTask(
     .pipe -> lib.metadata.rename(options.rename)
 )
 
-module.exports.umdWeb = util.lazyTask(
+module.exports.umdWeb = util.fnOptionLazyPipe(
   {
     umd: config.umd
   }
@@ -127,7 +127,7 @@ module.exports.umdWeb = util.lazyTask(
     .pipe -> lib.metadata.rename(options.rename)
 )
 
-module.exports.umdUmd = util.lazyTask(
+module.exports.umdUmd = util.fnOptionLazyPipe(
   {
     umd: config.umd
   }

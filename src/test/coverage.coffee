@@ -14,12 +14,11 @@ module.exports = (options) ->
   suite(options.name, () ->
     setup(() ->
       @timeout(100000)
-      debugger
-      includes = lib.util.extend({}, options.globals)
+      globals = lib.util.extend({}, options.globals)
       if typeof v8debug == 'object'
-        includes = lib.util.extend(includes, options.globalsDebug)
+        globals = lib.util.extend(globals, options.globalsDebug)
 
-      for own name, filePath of includes
+      for own name, filePath of globals
         if (filePath[0] == '.')
           global[name] = require(path.join(options.base, filePath))
         else
