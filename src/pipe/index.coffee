@@ -4,4 +4,5 @@ module.exports = {
   umd: require('./umd')
   sort: require('./sort')
   coffeeCoverage: require('./coffeeCoverage')
+  library: require('./library')
 }
