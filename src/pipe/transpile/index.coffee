@@ -6,11 +6,7 @@ coffeeCoverage = require('../coffeeCoverage')
 module.exports = util.fnOptionLazyPipe(
   {
     jade: {
-      data: {
-        lib: lib
-        config: config
-        util: util
-      }
+      data: {}
     }
   }
   {
@@ -20,10 +16,16 @@ module.exports = util.fnOptionLazyPipe(
     cson: config.cson
   }
   (options) ->
+    if options.jade?.data?
+      options.jade.data.all ?= {}
+      options.jade.data.all.lib ?= lib
+      options.jade.data.all.config ?= config
+      options.jade.data.all.util ?= util
+
     lib.pipe.lazypipe()
-    .pipe -> lib.pipe.if(options.cson?, lib.transpile.cson(options.cson))
-    .pipe -> lib.pipe.if(options.jade?, lib.transpile.jade(options.jade))
-    .pipe -> lib.pipe.if(options.coffeeScript?, lib.transpile.coffeeScript(options.coffeeScript))
-    .pipe -> lib.pipe.if(options.coffeeCoverage?, coffeeCoverage(options.coffeeCoverage))
+    .pipe -> lib.pipe.if(options.cson?, lib.pipe.if(config.glob.cson, lib.transpile.cson(options.cson)))
+    .pipe -> lib.pipe.if(options.jade?, lib.pipe.if(config.glob.jade, lib.transpile.jade(options.jade)))
+    .pipe -> lib.pipe.if(options.coffeeScript?, lib.pipe.if(config.glob.coffeeScript, lib.transpile.coffeeScript(options.coffeeScript)))
+    .pipe -> lib.pipe.if(options.coffeeCoverage?, lib.pipe.if(config.glob.coffeeScript, coffeeCoverage(options.coffeeCoverage)))
 
 )
