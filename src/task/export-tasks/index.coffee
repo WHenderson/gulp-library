@@ -7,21 +7,27 @@ formatName = (name) ->
       p1 + '-' + p2.toLowerCase()
   )
 
-module.exports = (tasks, { includes, prefix, number, chain = false } = {}) ->
+module.exports = (tasks, { includes, number, chained = 'chained', discrete = 'discrete' } = {}) ->
   includes ?= (k for k in Object.keys(tasks) when k[0] != '_')
-  prefix = if prefix? then prefix + '-' else if chain then 'chained' else ''
-  number ?= chain
+
+  chained = if chained then chained + '-' else ''
+  discrete = if discrete then discrete + '-' else ''
+
+  number ?= !!chained
 
   dep = []
+  iname = 0
+
   for name in includes
-    taskName = prefix
-    if number
-      taskName += "#{number}-"
+    taskName = if number then "#{iname}-" else ''
     taskName += formatName(name)
 
-    lib.gulp.task(taskName, dep, tasks[name])
-    if chain
-      dep = [taskName]
+    if discrete
+      lib.gulp.task(discrete + taskName, tasks[name])
+    if chained
+      lib.gulp.task(chained + taskName, dep, tasks[name])
+      dep = [chained + taskName]
+
+    ++iname
 
   return
-
