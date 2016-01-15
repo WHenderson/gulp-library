@@ -50,6 +50,8 @@ module.exports = {
     umd: require('gulp-umd')
 
     insert: require('gulp-insert')
+
+    uglify: require('gulp-uglify')
   }
 
   # transpile

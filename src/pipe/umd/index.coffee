@@ -13,15 +13,20 @@ module.exports = util.fnOptionLazyPipe(
     umdWeb: {}
     umdUmd: {}
     transpile: {}
+    uglify: {
+      preserveComments: 'some'
+    }
   }
   (options) ->
-    umd = lib.pipe.mirror(
-      module.exports.umdNode(options.umd, options.umdNode)
-      module.exports.umdWeb(options.umd, options.umdWeb)
-      module.exports.umdUmd(options.umd, options.umdUmd)
-    )
+    umd = () ->
+      lib.pipe.mirror(
+        module.exports.umdNode(options.umd, options.umdNode)
+        module.exports.umdWeb(options.umd, options.umdWeb)
+        module.exports.umdUmd(options.umd, options.umdUmd)
+      )
 
     lib.pipe.lazypipe()
+    .pipe -> lib.debug.debug({ title: '(1)' })
     .pipe -> lib.pipe.if(
       config.glob.coffeeScript
       (
@@ -48,12 +53,14 @@ module.exports = util.fnOptionLazyPipe(
             )()
           )
         )
+        .pipe -> lib.debug.debug({ title: '(2)' })
         .pipe -> lib.pipe.mirror(
           module.exports.umdCoffeeScript(options.umd, options.umdCoffeeScript)
           (
             lib.pipe.lazypipe()
             .pipe -> transpile(options.transpile, { coffeeCoverage: null })
-            .pipe -> umd
+            .pipe -> umd()
+            .pipe -> lib.debug.debug({ title: '(3)' })
           )()
           (
             lib.pipe.lazypipe()
@@ -61,11 +68,29 @@ module.exports = util.fnOptionLazyPipe(
             .pipe -> lib.metadata.rename({
               suffix: '.coverage'
             })
-            .pipe -> umd
+            .pipe -> umd()
+            .pipe -> lib.debug.debug({ title: '(4)' })
           )()
         )
       )()
-      umd
+      umd()
+    )
+    .pipe -> lib.debug.debug({ title: '(end)' })
+    .pipe -> lib.pipe.if(
+      config.glob.javaScript
+      lib.pipe.mirror(
+        lib.util.gutil.noop()
+        (
+          lib.pipe.lazypipe()
+          .pipe -> lib.transform.uglify(options.uglify)
+          .pipe -> lib.debug.debug({ title: 'uglify' })
+          .pipe -> lib.metadata.rename((pathBits) ->
+            console.log(pathBits)
+            pathBits.extname = '.min' + pathBits.extname
+            return
+          )
+        )()
+      )
     )
 )
 
