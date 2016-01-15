@@ -1,5 +1,6 @@
 {
   "name": "dummy-project",
   "version": "1.0.0",
-  "description": "Dummy test project"
+  "description": "Dummy test project",
+  "dependencies": {}
 }

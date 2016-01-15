@@ -3,4 +3,5 @@ module.exports = {
   copy: require('./copy')
   test: require('./test')
   exportTasks: require('./export-tasks')
+  library: require('./library')
 }

@@ -3,6 +3,7 @@ config = require('../../config')
 util = require('../../util')
 transpile = require('../transpile')
 
+
 module.exports = util.fnOptionLazyPipe(
   {
     isPlugin: false
@@ -14,6 +15,14 @@ module.exports = util.fnOptionLazyPipe(
     transpile: {}
   }
   (options) ->
+    console.log(options)
+
+    umd = lib.pipe.mirror(
+      module.exports.umdNode(options.umd, options.umdNode)
+      module.exports.umdWeb(options.umd, options.umdWeb)
+      module.exports.umdUmd(options.umd, options.umdUmd)
+    )
+
     lib.pipe.lazypipe()
     .pipe -> lib.pipe.if(
       config.glob.coffeeScript
@@ -33,13 +42,9 @@ module.exports = util.fnOptionLazyPipe(
               .pipe -> lib.metadata.rename({
                 suffix: '.applied'
               })
-              .pipe -> lib.transform.insert.transform((contents, file) ->
-                contents + """
-                #{file.data.exports}(#{options.params.join(', ')})
-                """
-              )
               .pipe -> lib.metadata.data((file) ->
-                file.data.exports = file.data.namespace = file.data.dependencies[0].param ? file.data.dependencies[0].name
+                file.data.exports = "#{file.data.exports}(#{(dep.param ? dep.name for dep in file.data.dependencies).join(', ')})"
+                file.data.namespace = file.data.dependencies[0].param ? file.data.dependencies[0].name
                 return file.data
               )
             )()
@@ -50,7 +55,7 @@ module.exports = util.fnOptionLazyPipe(
           (
             lib.pipe.lazypipe()
             .pipe -> transpile(options.transpile, { coffeeCoverage: null })
-            .pipe -> module.exports(options)
+            .pipe -> umd
           )()
           (
             lib.pipe.lazypipe()
@@ -58,15 +63,11 @@ module.exports = util.fnOptionLazyPipe(
             .pipe -> lib.metadata.rename({
               suffix: '.coverage'
             })
-            .pipe -> module.exports(options)
+            .pipe -> umd
           )()
         )
       )()
-      lib.pipe.mirror(
-        module.exports.umdNode(options.umd, options.umdNode)
-        module.exports.umdWeb(options.umd, options.umdWeb)
-        module.exports.umdUmd(options.umd, options.umdUmd)
-      )
+      umd
     )
 )
 

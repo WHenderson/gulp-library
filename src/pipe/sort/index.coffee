@@ -18,12 +18,12 @@ bits = (p) ->
 
 isSameOrChild = (parent, sameOrChild) ->
   parent = path.normalize(parent).split(path.sep)
-  sameOrChild = path.normalize(sameOrChild).split(path.sep).slice(parent.length)
+  sameOrChild = path.normalize(sameOrChild).split(path.sep).slice(0, parent.length)
 
   return parent.join(path.sep) == sameOrChild.join(path.sep)
 
 module.exports = () ->
-  sort({
+  lib.pipe.sort({
     comparator: (lhs, rhs) ->
       lhs = bits(lhs.path)
       rhs = bits(rhs.path)

@@ -29,6 +29,7 @@
     "gulp-coffee": "^2.3.1",
     "gulp-coffeelint": "^0.6.0",
     "gulp-cson": "^0.3.1",
+    "gulp-debug": "^2.1.2",
     "gulp-if": "^2.0.0",
     "gulp-jade": "^1.1.0",
     "gulp-mirror": "^0.4.0",

@@ -1,0 +1,1 @@
+  results.push('inner/a.coffee')

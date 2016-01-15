@@ -9,6 +9,11 @@ module.exports = {
     data: require('gulp-data')
   }
 
+  # debugging tools
+  debug: {
+    debug: require('gulp-debug')
+  }
+
   # file system
   fs: {
     clean: require('gulp-clean')
@@ -43,6 +48,8 @@ module.exports = {
     sourceMaps: require('gulp-sourcemaps')
 
     umd: require('gulp-umd')
+
+    insert: require('gulp-insert')
   }
 
   # transpile

@@ -39,7 +39,7 @@ module.exports = util.fnOptionLazyPipe(
           (file) ->
             covered = coverageInstrumentor.instrumentCoffee(file.path, file.contents.toString(), lib.util.extend({}, options, { fileName: file.relative }))
             file.contents = new Buffer(covered.init + covered.js)
-            file.path = lib.util.util.replaceExtension(file.path, '.js')
+            file.path = lib.util.gutil.replaceExtension(file.path, '.js')
             return file
         )
       )()

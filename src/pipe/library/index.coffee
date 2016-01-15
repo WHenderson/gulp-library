@@ -9,6 +9,7 @@ formatName = (name) ->
 
 module.exports = util.fnOptionLazyPipe(
   {
+    base: undefined
     name: undefined
     dependencies: []
     exports: undefined
@@ -18,13 +19,14 @@ module.exports = util.fnOptionLazyPipe(
     sort: {}
   }
   (options) ->
-    options.name ?= util.loadPackageJson().name
-    options.exports ?= formatName(name)
+    options.base ?= util.findPackageRoot()
+    options.name ?= util.loadPackageJson(options.base).name
+    options.exports ?= formatName(options.name)
     options.namespace ?= options.exports
 
     return lib.pipe.lazypipe()
     .pipe -> sort(options.sort)
-    .pipe -> lib.pipe.concat("#{name}.coffee")
+    .pipe -> lib.pipe.concat("#{options.name}.coffee")
     .pipe -> lib.metadata.data((file) ->
       file.data ?= {}
       file.data.exports = options.exports
