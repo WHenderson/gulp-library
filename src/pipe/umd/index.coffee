@@ -26,7 +26,6 @@ module.exports = util.fnOptionLazyPipe(
       )
 
     lib.pipe.lazypipe()
-    .pipe -> lib.debug.debug({ title: '(1)' })
     .pipe -> lib.pipe.if(
       config.glob.coffeeScript
       (
@@ -53,14 +52,12 @@ module.exports = util.fnOptionLazyPipe(
             )()
           )
         )
-        .pipe -> lib.debug.debug({ title: '(2)' })
         .pipe -> lib.pipe.mirror(
           module.exports.umdCoffeeScript(options.umd, options.umdCoffeeScript)
           (
             lib.pipe.lazypipe()
             .pipe -> transpile(options.transpile, { coffeeCoverage: null })
             .pipe -> umd()
-            .pipe -> lib.debug.debug({ title: '(3)' })
           )()
           (
             lib.pipe.lazypipe()
@@ -69,13 +66,12 @@ module.exports = util.fnOptionLazyPipe(
               suffix: '.coverage'
             })
             .pipe -> umd()
-            .pipe -> lib.debug.debug({ title: '(4)' })
+
           )()
         )
       )()
       umd()
     )
-    .pipe -> lib.debug.debug({ title: '(end)' })
     .pipe -> lib.pipe.if(
       config.glob.javaScript
       lib.pipe.mirror(
@@ -83,9 +79,7 @@ module.exports = util.fnOptionLazyPipe(
         (
           lib.pipe.lazypipe()
           .pipe -> lib.transform.uglify(options.uglify)
-          .pipe -> lib.debug.debug({ title: 'uglify' })
           .pipe -> lib.metadata.rename((pathBits) ->
-            console.log(pathBits)
             pathBits.extname = '.min' + pathBits.extname
             return
           )
