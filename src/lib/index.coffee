@@ -51,7 +51,7 @@ module.exports = {
 
     jade: require('gulp-jade')
 
-    cson: require('gulp-cson')
+    cson: require('gulp-cson/index.coffee')
   }
 
   # utilities
