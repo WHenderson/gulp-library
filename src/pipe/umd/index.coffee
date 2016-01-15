@@ -15,8 +15,6 @@ module.exports = util.fnOptionLazyPipe(
     transpile: {}
   }
   (options) ->
-    console.log(options)
-
     umd = lib.pipe.mirror(
       module.exports.umdNode(options.umd, options.umdNode)
       module.exports.umdWeb(options.umd, options.umdWeb)
