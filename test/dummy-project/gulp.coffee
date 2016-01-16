@@ -1,5 +1,4 @@
-gulp = require('gulp')
-all = require('gulp-library')
+all = require('../../src')
 
 tasks = {
   clean: () ->

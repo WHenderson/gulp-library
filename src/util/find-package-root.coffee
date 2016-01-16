@@ -1,7 +1,9 @@
 fs = require('fs')
 path = require('path')
+process = require('process')
 
-module.exports = (base = __dirname, name = 'package.json') ->
+module.exports = (base, name = 'package.json') ->
+  base ?= process.cwd()
   while true
     if fs.existsSync(path.join(base, name))
       return base
