@@ -6,6 +6,6 @@ module.exports = (src) ->
 
   return lib.gulp
   .src(src, { read: false })
-  .pipe(lib.fs.clean())
+  .pipe(lib.fs.rimraf())
 
 

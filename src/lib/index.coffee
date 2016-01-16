@@ -16,7 +16,7 @@ module.exports = {
 
   # file system
   fs: {
-    clean: require('gulp-clean')
+    rimraf: require('gulp-rimraf')
   }
 
   # flow control

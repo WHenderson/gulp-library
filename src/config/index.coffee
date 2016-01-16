@@ -5,6 +5,7 @@ module.exports = {
   output: {
     dist: 'dist'
     build: 'build'
+    coverage: 'coverage'
   }
 
   glob: {
