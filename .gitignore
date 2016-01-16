@@ -8,6 +8,7 @@
 # built libs - need to include for bower. yuk!
 /dist
 /test/dummy-project/dist
+/test/dummy-project/node_modules
 /lib
 /build
 
