@@ -57,6 +57,7 @@ module.exports = {
 
   coffeeCoverage: {
     instrumentor: 'istanbul'
+    coverageVar: '_$istanbul'
   }
 
   jade: {

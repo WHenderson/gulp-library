@@ -6,9 +6,9 @@ process = require('process')
 path = require('path')
 
 module.exports = util.fnOptionLazyPipe(
-  config.coffeeScript
-  config.coffeeCoverage
   (options) ->
+    options = util.mergeOptions({ bare: config.coffeeScript?.bare }, config.coffeeCoverage)
+
     coverageInstrumentor = new lib.util.coffeeCoverage.CoverageInstrumentor(
       bare: options.bare
       instrumentor: options.instrumentor
