@@ -56,23 +56,6 @@ suite('coverage', () ->
         return
 
       (done) ->
-        console.log('clean')
-
-        all.task.clean({ rimraf: { force: true } }) # outside working directory, so we need to force
-        .on('finish', () -> done()) # not sure why 'end' doesn't work here
-
-        return
-
-      (done) ->
-        console.log('validate')
-
-        for name, filePath of all.config.output when name != 'base'
-          assert.isFalse(fs.existsSync(path.join(all.config.output.base, filePath)))
-
-        done()
-        return
-
-      (done) ->
         done()
         doneTest()
         return
@@ -139,4 +122,26 @@ suite('coverage', () ->
         return
     ])
   )
+
+
+  test.only('coverage', (doneTest) ->
+    @timeout(20*1000)
+
+    async.series([
+      (done) ->
+        all.task.test.coverage({
+          mocha: {
+            compilers: 'coffee:coffee-script/register'
+            istanbul: {}
+          }
+        })
+        .on('end', () -> done())
+
+      (done) ->
+        done()
+        doneTest()
+        return
+    ])
+  )
+
  )

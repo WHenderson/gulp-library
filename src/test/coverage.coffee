@@ -15,7 +15,7 @@ module.exports = util.fnOption(
   }
   (options) ->
     options.spec ?= path.join(options.name, '*.{js,coffee}')
-    packageRoot = util.findPackageRoot()
+    packageRoot = util.findPackageRoot(options.base)
 
     suite(options.name, () ->
       setup(() ->
