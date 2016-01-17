@@ -29,12 +29,14 @@ suite('coverage', () ->
   )
 
   test('library', (doneTest) ->
+    libraryPath = @test.title
+
     async.series([
       (done) ->
         console.log('build')
 
         configReset()
-        all.config.output.base = path.join('../../build/test', 'library')
+        all.config.output.base = path.join('../../build/test', libraryPath)
 
         all.task.library({
           isPlugin: false
@@ -42,13 +44,72 @@ suite('coverage', () ->
         })
         .on('end', () -> done())
 
+      (done) ->
+        console.log('validate')
+
+        assert.compareDir(
+          path.join(__dirname, 'expected-results', libraryPath)
+          path.join(all.config.output.base)
+        )
+
+        done()
+        return
+
+      (done) ->
+        console.log('clean')
+
+        all.task.clean({ rimraf: { force: true } }) # outside working directory, so we need to force
+        .on('finish', () -> done()) # not sure why 'end' doesn't work here
+
         return
 
       (done) ->
         console.log('validate')
 
+        for name, filePath of all.config.output when name != 'base'
+          assert.isFalse(fs.existsSync(path.join(all.config.output.base, filePath)))
+
+        done()
+        return
+
+      (done) ->
+        done()
+        doneTest()
+        return
+    ])
+  )
+
+  test('library-plugin', (doneTest) ->
+    libraryPath = @test.title
+
+    async.series([
+      (done) ->
+        console.log('build')
+
+        configReset()
+        all.config.output.base = path.join('../../build/test', libraryPath)
+
+        all.task.library({
+          isPlugin: true
+          base: base
+          dependencies: [
+            {
+              name: 'knockout'
+              param: 'ko'
+            }
+            {
+              name: 'is-an'
+              param: 'isAn'
+            }
+          ]
+        })
+        .on('end', () -> done())
+
+      (done) ->
+        console.log('validate')
+
         assert.compareDir(
-          path.join(__dirname, 'expected-results', 'library')
+          path.join(__dirname, 'expected-results', libraryPath)
           path.join(all.config.output.base)
         )
 

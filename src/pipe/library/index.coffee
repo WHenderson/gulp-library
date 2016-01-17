@@ -26,6 +26,8 @@ module.exports = util.fnOptionLazyPipe(
     options.exports ?= formatName(options.name)
     options.namespace ?= options.exports
 
+    console.assert(not options.isPlugin or (options.dependencies? and options.dependencies.length >= 1), 'Plugins libraries require dependencies')
+
     return lib.pipe.lazypipe()
     .pipe -> sort(options.sort)
     .pipe -> lib.pipe.concat("#{options.name}.coffee")
