@@ -8,13 +8,18 @@ padd = require('./padd')
 exDiscardLeadingPath = /("|')(?:[^"']+)(?:\\\\|\/)(?:gulp-library)(?:\\\\|\/)([^"']+)\1/gi
 
 compareFile = (path1, stat1, path2, stat2, options) ->
-  if not path1.match(/\.coverage\.[^.]+\.js$/) or not stat1? or not stat2?
-    return (stat1.size == stat2.size) and fc.compareSync(path1, path2)
-  else
-    str1 = fs.readFileSync(path1, 'utf8').replace(exDiscardLeadingPath, (full, p1,p2) -> p1 + p2.replace(/\\\\/g, '/') + p1)
-    str2 = fs.readFileSync(path2, 'utf8').replace(exDiscardLeadingPath, (full, p1,p2) -> p1 + p2.replace(/\\\\/g, '/') + p1)
+  str1 = fs.readFileSync(path1, 'utf8').replace(/\r\n|\r|\n/g, '\n')
+  str2 = fs.readFileSync(path2, 'utf8').replace(/\r\n|\r|\n/g, '\n')
 
-    return str1 == str2
+  if path1.match(/\.coverage\.[^.]+\.js$/)
+    str1 = str1.replace(exDiscardLeadingPath, (full, p1,p2) -> p1 + p2.replace(/\\\\/g, '/') + p1)
+    str2 = str2.replace(exDiscardLeadingPath, (full, p1,p2) -> p1 + p2.replace(/\\\\/g, '/') + p1)
+
+  if str1 != str2
+    console.log(path1, (if str1 == str2 then '==' else '!='), path2)
+    debugger
+
+  return str1 == str2
 
 module.exports = (path1, path2, options, compareFileCallback, resultBuilderCallback) ->
   options ?= {}

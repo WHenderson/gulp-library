@@ -48,8 +48,8 @@ suite('coverage', () ->
         console.log('validate')
 
         assert.compareDir(
-          path.join(__dirname, 'expected-results', libraryPath)
           path.join(all.config.output.base)
+          path.join(__dirname, 'expected-results', libraryPath)
         )
 
         done()
@@ -92,8 +92,8 @@ suite('coverage', () ->
         console.log('validate')
 
         assert.compareDir(
-          path.join(__dirname, 'expected-results', libraryPath)
           path.join(all.config.output.base)
+          path.join(__dirname, 'expected-results', libraryPath)
         )
 
         done()
@@ -124,7 +124,7 @@ suite('coverage', () ->
   )
 
 
-  test.only('coverage', (doneTest) ->
+  test('coverage', (doneTest) ->
     @timeout(20*1000)
 
     async.series([
