@@ -5,7 +5,7 @@ assert = require('chai').assert
 path = require('path')
 padd = require('./padd')
 
-exDiscardLeadingPath = /("|')(?:[^"']+)(?:\\\\|\/)(?:gulp-library)(?:\\\\|\/)([^"']+)\1/gi
+exDiscardLeadingPath = /("|')(?:[^"']+)(?:\\\\|\/)(?:dummy-project)(?:\\\\|\/)([^"']+)\1/gi
 
 compareFile = (path1, stat1, path2, stat2, options) ->
   str1 = fs.readFileSync(path1, 'utf8').replace(/\r\n|\r|\n/g, '\n')

@@ -28,29 +28,23 @@ suite('coverage', () ->
     process.chdir(cwdOriginal)
   )
 
-  test('library', (doneTest) ->
-    libraryPath = @test.title
+  test('clean', (doneTest) ->
+    testTitle = @test.title
 
     async.series([
       (done) ->
-        console.log('build')
+        console.log('clean')
 
-        configReset()
-        all.config.output.base = path.join('../../build/test', libraryPath)
+        all.task.clean()
+        .on('finish', () -> done()) # not sure why 'end' doesn't work here
 
-        all.task.library({
-          isPlugin: false
-          base: base
-        })
-        .on('end', () -> done())
+        return
 
       (done) ->
         console.log('validate')
 
-        assert.compareDir(
-          path.join(all.config.output.base)
-          path.join(__dirname, 'expected-results', libraryPath)
-        )
+        for name, filePath of all.config.output when name != 'base'
+          assert.isFalse(fs.existsSync(path.join(all.config.output.base, filePath)))
 
         done()
         return
@@ -63,14 +57,14 @@ suite('coverage', () ->
   )
 
   test('library-plugin', (doneTest) ->
-    libraryPath = @test.title
+    testTitle = @test.title
 
     async.series([
       (done) ->
         console.log('build')
 
         configReset()
-        all.config.output.base = path.join('../../build/test', libraryPath)
+        #all.config.output.base = path.join('../../build/test', libraryPath)
 
         all.task.library({
           isPlugin: true
@@ -92,8 +86,8 @@ suite('coverage', () ->
         console.log('validate')
 
         assert.compareDir(
-          path.join(all.config.output.base)
-          path.join(__dirname, 'expected-results', libraryPath)
+          path.resolve(all.config.output.base, all.config.output.dist)
+          path.join(__dirname, 'expected-results', testTitle, all.config.output.dist)
         )
 
         done()
@@ -102,7 +96,7 @@ suite('coverage', () ->
       (done) ->
         console.log('clean')
 
-        all.task.clean({ rimraf: { force: true } }) # outside working directory, so we need to force
+        all.task.clean()
         .on('finish', () -> done()) # not sure why 'end' doesn't work here
 
         return
@@ -123,8 +117,41 @@ suite('coverage', () ->
     ])
   )
 
+  test('library', (doneTest) ->
+    testTitle = @test.title
 
-  test.only('coverage', (doneTest) ->
+    async.series([
+      (done) ->
+        console.log('build')
+
+        configReset()
+        #all.config.output.base = path.join('../../build/test', libraryPath)
+
+        all.task.library({
+          isPlugin: false
+          base: base
+        })
+        .on('end', () -> done())
+
+      (done) ->
+        console.log('validate')
+
+        assert.compareDir(
+          path.resolve(all.config.output.base, all.config.output.dist)
+          path.join(__dirname, 'expected-results', testTitle, all.config.output.dist)
+        )
+
+        done()
+        return
+
+      (done) ->
+        done()
+        doneTest()
+        return
+    ])
+  )
+
+  test('coverage', (doneTest) ->
     @timeout(20*1000)
 
     async.series([

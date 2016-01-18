@@ -1,16 +1,14 @@
-# Coverage directory used by tools like istanbul
-/coverage
-
-# Dependency directory
-# https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
-/node_modules
-
-# built libs - need to include for bower. yuk!
 /dist
-/test/dummy-project/dist
-/test/dummy-project/node_modules
+/coverage
+/node_modules
 /lib
 /build
+
+/test/dummy-project/dist
+/test/dummy-project/coverage
+/test/dummy-project/node_modules
+/test/dummy-project/lib
+/test/dummy-project/build
 
 # IDE
 /.idea

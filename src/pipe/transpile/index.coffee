@@ -1,7 +1,7 @@
 lib = require('../../lib')
 config = require('../../config')
 util = require('../../util')
-coffeeCoverage = require('../coffeeCoverage')
+coffeeCoverage = require('../coffee-coverage')
 
 module.exports = util.fnOptionLazyPipe(
   {

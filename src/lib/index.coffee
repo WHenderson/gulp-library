@@ -36,6 +36,10 @@ module.exports = {
     sort: require('gulp-sort')
 
     concat: require('gulp-concat')
+
+    through: require('through')
+
+    through2: require('through2')
   }
 
   # lint
@@ -86,5 +90,9 @@ module.exports = {
     mocha: require('gulp-spawn-mocha')
 
     mochaPhantomJs: require('gulp-mocha-phantomjs')
+
+    istanbul: require('gulp-istanbul')
+
+    istanbulReport: require('gulp-istanbul-report')
   }
 }

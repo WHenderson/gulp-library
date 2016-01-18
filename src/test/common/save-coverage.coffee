@@ -2,12 +2,15 @@ config = require('../../config')
 fs = require('fs')
 path = require('path')
 process = require('process')
+mkdirp = require('mkdirp')
 
-module.exports = (name) ->
+module.exports = (name='coverage', reason) ->
   coverage = global[config.coffeeCoverage.coverageVar]
-  coveragePath = path.resolve(config.output.base, config.output.coverage, 'coverage.json')
+  coverageBase = path.resolve(config.output.base, config.output.coverage, 'parts')
+  coveragePath = path.resolve(coverageBase, name + '.json')
 
   try
+    mkdirp.sync(coverageBase)
     fs.writeFileSync(coveragePath, JSON.stringify(coverage))
     console.log('Saved coverage:', coveragePath)
   catch ex
@@ -15,8 +18,8 @@ module.exports = (name) ->
 
   return
 
-module.exports.register = () ->
-  process.on('exit', module.exports.bind(null, 'exit'))
-  process.on('SIGINT', module.exports.bind(null, 'SIGINT'))
-  process.on('uncaughtException', module.exports.bind(null, 'uncaughtException'))
+module.exports.register = (name) ->
+  process.on('exit', module.exports.bind(null, name, 'exit'))
+  process.on('SIGINT', module.exports.bind(null, name, 'SIGINT'))
+  process.on('uncaughtException', module.exports.bind(null, name, 'uncaughtException'))
   return

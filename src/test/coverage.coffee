@@ -19,7 +19,7 @@ module.exports = util.fnOption(
     packageRoot = util.findPackageRoot(options.base)
 
     if options.saveOnExit
-      require('./common/save-coverage').register()
+      require('./common/save-coverage').register(options.name)
 
     suite(options.name, () ->
       setup(() ->
