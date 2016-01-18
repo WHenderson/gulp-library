@@ -6,6 +6,7 @@ module.exports = {
     dist: 'dist'
     build: 'build'
     coverage: 'coverage'
+    istanbulConfig: 'istanbul.yml'
     base: ''
   }
 
@@ -35,6 +36,13 @@ module.exports = {
     R: 'spec'
     u: 'tdd'
     istanbul: false
+  }
+
+  istanbulConfig: {
+    verbose: true
+    instrumentation: {
+      variable: '_$istanbul'
+    }
   }
 
   lintCoffeeScript: cson.load(path.join(__dirname, './coffee-script.cson'))

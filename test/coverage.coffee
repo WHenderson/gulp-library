@@ -124,7 +124,7 @@ suite('coverage', () ->
   )
 
 
-  test('coverage', (doneTest) ->
+  test.only('coverage', (doneTest) ->
     @timeout(20*1000)
 
     async.series([
@@ -132,7 +132,7 @@ suite('coverage', () ->
         all.task.test.coverage({
           mocha: {
             compilers: 'coffee:coffee-script/register'
-            istanbul: {}
+            istanbul: false
           }
         })
         .on('end', () -> done())
@@ -142,6 +142,9 @@ suite('coverage', () ->
         doneTest()
         return
     ])
+  )
+
+  test('dummy', () ->
   )
 
  )

@@ -12,10 +12,14 @@ module.exports = util.fnOption(
     globals: config.globals
     globalsDebug: config.globalsDebug
     base: undefined
+    saveOnExit: true
   }
   (options) ->
     options.spec ?= path.join(options.name, '*.{js,coffee}')
     packageRoot = util.findPackageRoot(options.base)
+
+    if options.saveOnExit
+      require('./common/save-coverage').register()
 
     suite(options.name, () ->
       setup(() ->
