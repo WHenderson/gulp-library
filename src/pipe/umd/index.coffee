@@ -105,8 +105,7 @@ module.exports.umdCoffeeScript = util.fnOptionLazyPipe(
             %><%= dependencies[i].param %> = require('<%= dependencies[i].cjs || dependencies[i].name %>')
         <%
           }
-        %>
-        <%= contents %>
+        %><%= contents %>
         module.exports = <%= exports %>
         '''
     }
