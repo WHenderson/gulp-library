@@ -13,21 +13,24 @@ module.exports = util.fnOption(
     lib.gulp
     .src(options.spec, { base: options.base })
     .pipe(lib.metadata.data((file, cb) ->
-      filePaths = lib.util.glob.sync(path.join(path.dirname(file.path), path.basename(file.path).slice(0, -path.extname(file.path).length), '**/*.{js,coffee}'))
-      filePaths = filePaths
-      .filter((filePath) ->
-        extname = path.extname(filePath)
-        srcname = filePath.slice(0, filePath.length - extname.length) + '.coffee'
+      dirname = path.dirname(file.path)
+      extname = path.extname(file.path)
+      basename = path.basename(file.path)
+      basenameNoextname = basename.slice(0, basename.length - extname.length)
 
-        return extname == '.coffee' or filePaths.indexOf(srcname) == -1
-      )
-      .map((filePath) ->
-        return path.relative('.', filePath)
-      )
+      filePaths = []
 
       lib.gulp
-      .src(filePaths, { base: options.base })
-      .pipe(pipe.transpile(options.transpile, { coffeeScript: null }))
+      .src(path.join(dirname, basenameNoextname, '**/*'), { base: options.base })
+      .pipe(lib.pipe.sort())
+      .pipe(lib.pipe.mirror(
+        lib.util.gutil.noop()
+        pipe.transpile(options.transpile, { coffeeCoverage: null })
+      ))
+      .pipe(lib.pipe.if(config.glob.javaScript, lib.pipe.through2Map.obj((file) ->
+        filePaths.push(file.path)
+        return file
+      )))
       .pipe(lib.gulp.dest(config.output.testing))
       .on('end', () ->
         filePaths = filePaths.map((filePath) ->
