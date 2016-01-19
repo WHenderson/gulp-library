@@ -1,0 +1,22 @@
+{
+  "name": "gulp-library",
+  "description": "gulp package for creating a client-side library",
+  "main": "index.js",
+  "authors": [
+    "Will Henderson <whenderson.github@gmail.com> (https://github.com/WHenderson)"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/WHenderson/gulp-library",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mocha": "~2.3.4",
+    "chai": "~3.4.2"
+  }
+}

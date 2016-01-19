@@ -171,6 +171,22 @@ suite('coverage', () ->
     ])
   )
 
+  test.only('client', (doneTest) ->
+    @timeout(20*1000)
+
+    async.series([
+      (done) ->
+        all.task.test.client({
+        })
+        .on('end', () -> done())
+
+      (done) ->
+        done()
+        doneTest()
+        return
+    ])
+  )
+
   test('dummy', () ->
   )
 

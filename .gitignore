@@ -1,12 +1,14 @@
 /dist
 /coverage
 /node_modules
+/bower_components
 /lib
 /build
 
 /test/dummy-project/dist
 /test/dummy-project/coverage
 /test/dummy-project/node_modules
+/test/dummy-project/bower_components
 /test/dummy-project/lib
 /test/dummy-project/build
 
