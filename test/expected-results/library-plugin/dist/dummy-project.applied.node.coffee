@@ -1,3 +1,5 @@
+ko = require('knockout')
+isAn = require('is-an')
 x = 1
 
 if x == 1
@@ -16,3 +18,4 @@ dummyProject = (ko) ->
   results.push('inner/z.coffee')
   results.push('index.end.coffee')
   return results
+module.exports = dummyProject(ko)

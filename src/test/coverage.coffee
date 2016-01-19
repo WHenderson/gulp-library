@@ -9,8 +9,8 @@ module.exports = util.fnOption(
   {
     name: 'coverage'
     spec: undefined
-    globals: config.globals
-    globalsDebug: config.globalsDebug
+    globals: {}
+    globalsDebug: {}
     base: undefined
     saveOnExit: true
   }
@@ -24,9 +24,15 @@ module.exports = util.fnOption(
     suite(options.name, () ->
       setup(() ->
         @timeout(25*1000)
-        globals = lib.util.extend({}, options.globals)
-        if typeof v8debug == 'object'
-          globals = lib.util.extend(globals, options.globalsDebug)
+
+        isDebugging = typeof v8debug == 'object'
+
+        globals = util.mergeOptions(
+          config.globals,
+          options.globals
+          if isDebugging then config.globalsDebug
+          if isDebugging then options.globalsDebug
+        )
 
         for own name, filePath of globals
           if not filePath?

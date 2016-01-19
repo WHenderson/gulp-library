@@ -38,6 +38,10 @@ module.exports = util.fnOptionLazyPipe(
               .pipe -> lib.metadata.rename({
                 suffix: '.apply'
               })
+              .pipe -> lib.metadata.data((file) ->
+                file.data.dependencies.shift()
+                return file.data
+              )
             )()
             (
               lib.pipe.lazypipe()
@@ -45,15 +49,24 @@ module.exports = util.fnOptionLazyPipe(
                 suffix: '.applied'
               })
               .pipe -> lib.metadata.data((file) ->
-                file.data.exports = "#{file.data.exports}(#{(dep.param ? dep.name for dep in file.data.dependencies).join(', ')})"
-                file.data.namespace = file.data.dependencies[0].param ? file.data.dependencies[0].name
+                dependency = file.data.dependencies[0]
+                paramName = dependency.param ? dependency.name
+                file.data.exports = "#{file.data.exports}(#{paramName})"
+                file.data.namespace = paramName
                 return file.data
               )
             )()
           )
         )
         .pipe -> lib.pipe.mirror(
-          module.exports.umdCoffeeScript(options.umd, options.umdCoffeeScript)
+          lib.util.gutil.noop()
+          (
+            lib.pipe.lazypipe()
+            .pipe -> lib.metadata.rename({
+              suffix: '.node'
+            })
+            .pipe -> module.exports.umdCoffeeScript(options.umd, options.umdCoffeeScript)
+          )()
           (
             lib.pipe.lazypipe()
             .pipe -> transpile(options.transpile, { coffeeCoverage: null })
@@ -77,7 +90,7 @@ module.exports = util.fnOptionLazyPipe(
       umd()
     )
     .pipe -> lib.pipe.if(
-      config.glob.javaScript
+      config.glob.javaScript,
       lib.pipe.mirror(
         lib.util.gutil.noop()
         (

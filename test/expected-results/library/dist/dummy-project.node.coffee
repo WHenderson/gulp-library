@@ -16,3 +16,4 @@ dummyProject = (ko) ->
   results.push('inner/z.coffee')
   results.push('index.end.coffee')
   return results
+module.exports = dummyProject

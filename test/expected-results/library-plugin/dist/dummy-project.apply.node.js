@@ -1,4 +1,4 @@
-(function (ko, isAn){
+(function (isAn){
 var dummyProject, x, y;
 
 x = 1;
@@ -11,7 +11,7 @@ if (x === 1) {
   y = -1;
 }
 
-dummyProject = function(ko, isAn) {
+dummyProject = function(ko) {
   var results;
   results = [];
   results.push('index.begin.coffee');
@@ -23,4 +23,4 @@ dummyProject = function(ko, isAn) {
 };
 
 module.exports = dummyProject;
-})(require('knockout'), require('is-an'));
+})(require('is-an'));

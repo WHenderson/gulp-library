@@ -7,6 +7,6 @@ else if x == 2
 else
   y = -1
 
-dummyProject = (ko, isAn) ->
+dummyProject = (ko) ->
   results = []
   results.push('index.begin.coffee')

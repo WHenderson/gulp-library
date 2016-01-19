@@ -1,12 +1,12 @@
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['knockout', 'is-an'], factory);
+    define(['is-an'], factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(require('knockout'), require('is-an'));
+    module.exports = factory(require('is-an'));
   } else {
-    root.dummyProject = factory(root.knockout, root.is-an);
+    root.dummyProject = factory(root.is-an);
   }
-}(this, function(ko, isAn) {
+}(this, function(isAn) {
 var dummyProject, x, y;
 
 x = 1;
@@ -19,7 +19,7 @@ if (x === 1) {
   y = -1;
 }
 
-dummyProject = function(ko, isAn) {
+dummyProject = function(ko) {
   var results;
   results = [];
   results.push('index.begin.coffee');
