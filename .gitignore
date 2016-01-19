@@ -4,6 +4,7 @@
 /bower_components
 /lib
 /build
+/testing
 
 /test/dummy-project/dist
 /test/dummy-project/coverage
@@ -11,6 +12,7 @@
 /test/dummy-project/bower_components
 /test/dummy-project/lib
 /test/dummy-project/build
+/test/dummy-project/testing
 
 # IDE
 /.idea

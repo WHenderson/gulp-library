@@ -7,10 +7,11 @@ path = require('path')
 module.exports = util.fnOption(
   {
     spec: 'test/*.jade'
+    base: 'test'
   }
   (options) ->
     lib.gulp
-    .src(options.spec, { base: '.' })
+    .src(options.spec, { base: options.base })
     .pipe(lib.metadata.data((file, cb) ->
       filePaths = lib.util.glob.sync(path.join(path.dirname(file.path), path.basename(file.path).slice(0, -path.extname(file.path).length), '**/*.{js,coffee}'))
       filePaths = filePaths
@@ -21,13 +22,13 @@ module.exports = util.fnOption(
         return extname == '.coffee' or filePaths.indexOf(srcname) == -1
       )
       .map((filePath) ->
-        return path.relative(file.base, filePath)
+        return path.relative('.', filePath)
       )
 
       lib.gulp
-      .src(filePaths, { base: '.' })
+      .src(filePaths, { base: options.base })
       .pipe(pipe.transpile(options.transpile, { coffeeScript: null }))
-      .pipe(lib.gulp.dest('.'))
+      .pipe(lib.gulp.dest(config.output.testing))
       .on('end', () ->
         filePaths = filePaths.map((filePath) ->
           # rename file
@@ -44,7 +45,6 @@ module.exports = util.fnOption(
         )
 
         bower = path.relative(path.dirname(file.path), path.resolve(__dirname, '../../../bower_components')).replace(/\\/g, '/')
-        console.log(bower)
 
         data = util.mergeOptions(
           {
@@ -72,5 +72,5 @@ module.exports = util.fnOption(
       return
     ))
     .pipe(pipe.transpile(options.transpile))
-    .pipe(lib.gulp.dest('.'))
+    .pipe(lib.gulp.dest(config.output.testing))
 )

@@ -5,6 +5,7 @@ module.exports = {
   output: {
     dist: 'dist'
     build: 'build'
+    testing: 'testing'
     coverage: 'coverage'
     istanbulConfig: 'istanbul.yml'
     base: ''
