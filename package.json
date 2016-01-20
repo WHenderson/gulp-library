@@ -26,7 +26,6 @@
     "chai": "^3.4.1",
     "coffee-coverage": "^0.7.0",
     "cson": "^3.0.2",
-    "deasync": "^0.1.4",
     "dir-compare": "0.0.2",
     "extend": "^3.0.0",
     "glob": "^6.0.3",
