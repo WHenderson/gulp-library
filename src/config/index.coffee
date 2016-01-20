@@ -17,18 +17,11 @@ module.exports = {
     cson: '*.cson'
   }
 
-  globals: {
-  }
   nodeGlobals: {
-  }
-  webGlobals: {
-  }
-
-  globalsDebug: {
   }
   nodeGlobalsDebug: {
   }
-  webGlobalsDebug: {
+  webGlobals: {
   }
 
   mocha: {

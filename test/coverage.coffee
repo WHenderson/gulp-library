@@ -171,12 +171,15 @@ suite('coverage', () ->
       ])
     )
 
-    test('test client', (doneTest) ->
+    test.only('test client', (doneTest) ->
       @timeout(20*1000)
 
       async.series([
         (done) ->
           all.task.test.client({
+            globals: {
+              dummyProject: '../dist/dummy-project.coverage.web.js'
+            }
           })
           .on('end', () -> done())
           return

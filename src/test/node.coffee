@@ -36,9 +36,9 @@ module.exports = util.fnOption(
         isDebugging = typeof v8debug == 'object'
 
         globals = util.mergeOptions(
-          config.globals,
+          config.nodeGlobals,
           options.globals
-          if isDebugging then config.globalsDebug
+          if isDebugging then config.nodeGlobalsDebug
           if isDebugging then options.globalsDebug
         )
 

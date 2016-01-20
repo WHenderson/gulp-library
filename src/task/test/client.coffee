@@ -8,6 +8,7 @@ module.exports = util.fnOption(
   {
     spec: 'test/*.jade'
     base: 'test'
+    globals: {}
   }
   (options) ->
     lib.gulp
@@ -66,9 +67,13 @@ module.exports = util.fnOption(
               paths: {
                 tests: filePaths
               }
+              webGlobals: options.globals
             }
           }
         )
+        console.log('options:', options)
+        console.log('data   :', data)
+
         cb(undefined, data)
       )
 

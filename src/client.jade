@@ -27,6 +27,13 @@ html
           script.
             mocha.setup('!{config.mocha.u}')
 
+        block headJsGlobals
+          each src, name in config.webGlobals
+            if ({}.hasOwnProperty.call(config.webGlobals, name))
+              script(src=src)
+              <!-- !{name} -->
+              = '\n'
+
   block body
     body
       block mochaDiv
@@ -34,7 +41,7 @@ html
 
       block bodyJs
         block bodyJsTests
-          - for testPath in config.paths.tests
+          each testPath in config.paths.tests
             script(src=testPath)
         block bodyJsRun
           script.
