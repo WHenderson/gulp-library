@@ -7,4 +7,5 @@ module.exports = {
   combineCoverage: require('./combine-coverage')
   collectCoverage: require('./collect-coverage')
   library: require('./library')
+  done: require('./done')
 }

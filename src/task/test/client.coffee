@@ -81,4 +81,9 @@ module.exports = util.fnOption(
     ))
     .pipe(pipe.transpile(options.transpile))
     .pipe(lib.gulp.dest(config.output.testing))
+    .pipe(lib.pipe.through2Map.obj((file) ->
+      file.path = path.resolve(config.output.testing, path.relative(file.base, file.path))
+      return file
+    ))
+    .pipe(lib.test.mochaPhantomJs())
 )

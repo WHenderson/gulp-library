@@ -28,7 +28,7 @@ suite('coverage', () ->
     process.chdir(cwdOriginal)
   )
 
-  suite('build', () ->
+  suite.skip('build', () ->
     test('clean', (doneTest) ->
       testTitle = @test.title
 
@@ -37,8 +37,9 @@ suite('coverage', () ->
           console.log('clean')
 
           all.task.clean()
-          .on('finish', () -> done()) # not sure why 'end' doesn't work here
-
+          .pipe(all.pipe.done.sync(() ->
+            done()
+          ))
           return
 
         (done) ->
@@ -80,7 +81,9 @@ suite('coverage', () ->
               }
             ]
           })
-          .on('end', () -> done())
+          .pipe(all.pipe.done.sync(() ->
+            done()
+          ))
           return
 
         (done) ->
@@ -98,7 +101,9 @@ suite('coverage', () ->
           console.log('clean')
 
           all.task.clean()
-          .on('finish', () -> done()) # not sure why 'end' doesn't work here
+          .pipe(all.pipe.done.sync(() ->
+            done()
+          ))
 
           return
 
@@ -131,7 +136,9 @@ suite('coverage', () ->
             isPlugin: false
             base: base
           })
-          .on('end', () -> done())
+          .pipe(all.pipe.done.sync(() ->
+            done()
+          ))
           return
 
         (done) ->
@@ -155,13 +162,21 @@ suite('coverage', () ->
 
   suite('test', () ->
     test('test node', (doneTest) ->
-      @timeout(20*1000)
+      @timeout(30*1000)
 
       async.series([
         (done) ->
           all.task.test.node({
           })
-          .on('end', () -> done())
+          .pipe(all.lib.pipe.through2.obj(
+            (file) -> file
+            (cb) ->
+              console.log('hmm')
+              cb()
+          ))
+          .pipe(all.pipe.done.sync(() ->
+            done()
+          ))
           return
 
         (done) ->
@@ -171,7 +186,7 @@ suite('coverage', () ->
       ])
     )
 
-    test.only('test client', (doneTest) ->
+    test('test client', (doneTest) ->
       @timeout(20*1000)
 
       async.series([
@@ -181,7 +196,9 @@ suite('coverage', () ->
               dummyProject: '../dist/dummy-project.coverage.web.js'
             }
           })
-          .on('end', () -> done())
+          .pipe(all.pipe.done.sync(() ->
+            done()
+          ))
           return
 
         (done) ->
