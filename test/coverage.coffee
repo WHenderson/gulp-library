@@ -191,7 +191,7 @@ suite('coverage', () ->
       ])
     )
 
-    test('test client', (doneTest) ->
+    test.only('test client', (doneTest) ->
       @timeout(30*1000)
 
       async.series([

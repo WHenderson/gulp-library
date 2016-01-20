@@ -69,6 +69,7 @@ module.exports = util.fnOption(
               }
               webGlobals: options.globals
             }
+            testName: basename
           }
         )
 
@@ -83,5 +84,9 @@ module.exports = util.fnOption(
       file.path = path.resolve(config.output.testing, path.relative(file.base, file.path))
       return file
     ))
-    .pipe(lib.test.mochaPhantomJs())
+    .pipe(lib.test.mochaPhantomJs({
+      phantomjs: {
+        hooks: path.join(__dirname, '../../../lib/hooks.js')
+      }
+    }))
 )

@@ -17,6 +17,10 @@ html
           link(rel='stylesheet', href=config.paths.mocha + '/mocha.css')
 
       block headJs
+        block headJsConfig
+          script.
+            window._$config = !{JSON.stringify(config, null, 2)};
+
         block headJsChai
           script(src=config.paths.chai + '/chai.js')
           script.
