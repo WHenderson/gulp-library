@@ -68,8 +68,8 @@ module.exports = util.fnOption(
                 tests: filePaths
               }
               webGlobals: options.globals
+              testName: basenameNoextname
             }
-            testName: basename
           }
         )
 

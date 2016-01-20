@@ -6,7 +6,7 @@ module.exports = {
     dist: 'dist'
     build: 'build'
     testing: 'testing'
-    node: 'coverage'
+    coverage: 'coverage'
     base: ''
   }
 
