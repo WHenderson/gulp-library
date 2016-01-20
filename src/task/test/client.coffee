@@ -71,8 +71,6 @@ module.exports = util.fnOption(
             }
           }
         )
-        console.log('options:', options)
-        console.log('data   :', data)
 
         cb(undefined, data)
       )

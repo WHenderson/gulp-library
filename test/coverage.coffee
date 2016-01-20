@@ -14,7 +14,9 @@ suite('coverage', () ->
   configReset = () -> resetDeep(global.all.config, configOriginal)
 
   setup(() ->
-    @timeout(25*1000)
+    # building coverage takes time
+    @timeout(30*1000)
+
     global.all = require('../src')
     configOriginal = all.lib.util.extend(true, {}, all.config)
   )
@@ -28,8 +30,9 @@ suite('coverage', () ->
     process.chdir(cwdOriginal)
   )
 
-  suite.skip('build', () ->
+  suite('build', () ->
     test('clean', (doneTest) ->
+      @timeout(10*1000)
       testTitle = @test.title
 
       async.series([
@@ -59,6 +62,7 @@ suite('coverage', () ->
     )
 
     test('library-plugin', (doneTest) ->
+      @timeout(100*1000)
       testTitle = @test.title
 
       async.series([
@@ -81,9 +85,9 @@ suite('coverage', () ->
               }
             ]
           })
-          .pipe(all.pipe.done.sync(() ->
+          .on('end', () ->
             done()
-          ))
+          )
           return
 
         (done) ->
@@ -124,6 +128,7 @@ suite('coverage', () ->
     )
 
     test('library', (doneTest) ->
+      @timeout(30*1000)
       testTitle = @test.title
 
       async.series([
@@ -136,9 +141,9 @@ suite('coverage', () ->
             isPlugin: false
             base: base
           })
-          .pipe(all.pipe.done.sync(() ->
+          .on('end', () ->
             done()
-          ))
+          )
           return
 
         (done) ->
@@ -187,7 +192,7 @@ suite('coverage', () ->
     )
 
     test('test client', (doneTest) ->
-      @timeout(20*1000)
+      @timeout(30*1000)
 
       async.series([
         (done) ->
