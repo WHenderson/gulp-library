@@ -79,7 +79,7 @@ module.exports = util.fnOptionLazyPipe(
               suffix: '.coverage'
             })
             .pipe -> lib.metadata.data((file) ->
-              file.data.coverage = true
+              file.data.node = true
               return file.data
             )
             .pipe -> umd()
@@ -95,7 +95,7 @@ module.exports = util.fnOptionLazyPipe(
         lib.util.gutil.noop()
         (
           lib.pipe.lazypipe()
-          .pipe -> lib.pipe.ignore((file) -> file.data.coverage == true)
+          .pipe -> lib.pipe.ignore((file) -> file.data.node == true)
           .pipe -> lib.transform.uglify(options.uglify)
           .pipe -> lib.metadata.rename((pathBits) ->
             pathBits.extname = '.min' + pathBits.extname

@@ -22,15 +22,11 @@ module.exports = util.fnOptionLazyPipe(
     collect = lib.pipe.through()
 
     collect.on('end', () ->
-      console.log('collecting coverage...', path.resolve(config.output.base, config.output.coverage, 'parts', '*.json'))
       combine = (done) ->
-        console.log('combining?', path.resolve(config.output.base, config.output.coverage, 'parts', '*.json'))
         lib.gulp
-        .src(path.join(config.output.base, config.output.coverage, 'parts', '*.json'))
-        .pipe(lib.debug.debug({ title: 'coverage files' }))
+        .src(path.join(config.output.base, config.output.node, 'parts', '*.json'))
         .pipe(combineCoverage(options.combineCoverage))
-        .pipe(lib.debug.debug({ title: 'coverage' }))
-        .pipe(lib.gulp.dest(path.join(config.output.base, config.output.coverage)))
+        .pipe(lib.gulp.dest(path.join(config.output.base, config.output.node)))
         .pipe(lib.test.istanbulReport(options.istanbulReport))
         .on('end', () ->
           console.log('end stream')
@@ -39,8 +35,6 @@ module.exports = util.fnOptionLazyPipe(
         return
 
       deasync(combine)()
-
-      console.log('done collecting?')
     ).resume()
 
     lib.pipe.lazypipe()

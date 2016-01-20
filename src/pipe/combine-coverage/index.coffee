@@ -23,7 +23,7 @@ module.exports = util.fnOptionLazyPipe(
         return
 
       if file.isStream()
-        @emit('error', new lub.util.gutil.PluginError('coverage', 'Streaming not supported'))
+        @emit('error', new lub.util.gutil.PluginError('combine-coverage', 'Streaming not supported'))
         cb()
         return
 

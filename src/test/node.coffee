@@ -7,15 +7,23 @@ global.assert = require('chai').assert
 
 module.exports = util.fnOption(
   {
-    name: 'coverage'
+    fileName: undefined
+    name: undefined
     spec: undefined
     globals: {}
     globalsDebug: {}
-    base: undefined
     saveOnExit: true
   }
   (options) ->
-    options.spec ?= path.join(options.name, '*.{js,coffee}')
+    dirname = path.dirname(options.fileName)
+    extname = path.extname(options.fileName)
+    basename = path.basename(options.fileName)
+    basenameNoextname = basename.slice(0, basename.length - extname.length)
+
+    options.name ?= basenameNoextname
+    options.base = dirname
+
+    options.spec ?= '*.{js,coffee}'
     packageRoot = util.findPackageRoot(options.base)
 
     if options.saveOnExit
@@ -45,7 +53,7 @@ module.exports = util.fnOption(
         return
       )
 
-      fileNames = lib.util.glob.sync(path.join(options.base, options.spec), {})
+      fileNames = lib.util.glob.sync(path.join(dirname, basenameNoextname, options.spec), {})
       for fileName in fileNames
         suite(path.relative(options.base, fileName), () ->
           require(fileName)

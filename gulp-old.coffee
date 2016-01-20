@@ -34,7 +34,7 @@ tasks = {
     )
 
   testCoverage: () ->
-    all.task.test.coverage()
+    all.task.test.node()
 
   testExamples: () ->
     all.task.test.examples()

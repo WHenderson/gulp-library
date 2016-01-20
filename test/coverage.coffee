@@ -28,166 +28,169 @@ suite('coverage', () ->
     process.chdir(cwdOriginal)
   )
 
-  test('clean', (doneTest) ->
-    testTitle = @test.title
+  suite('build', () ->
+    test('clean', (doneTest) ->
+      testTitle = @test.title
 
-    async.series([
-      (done) ->
-        console.log('clean')
+      async.series([
+        (done) ->
+          console.log('clean')
 
-        all.task.clean()
-        .on('finish', () -> done()) # not sure why 'end' doesn't work here
+          all.task.clean()
+          .on('finish', () -> done()) # not sure why 'end' doesn't work here
 
-        return
+          return
 
-      (done) ->
-        console.log('validate')
+        (done) ->
+          console.log('validate')
 
-        for name, filePath of all.config.output when name != 'base'
-          assert.isFalse(fs.existsSync(path.join(all.config.output.base, filePath)))
+          for name, filePath of all.config.output when name != 'base'
+            assert.isFalse(fs.existsSync(path.join(all.config.output.base, filePath)))
 
-        done()
-        return
+          done()
+          return
 
-      (done) ->
-        done()
-        doneTest()
-        return
-    ])
+        (done) ->
+          done()
+          doneTest()
+          return
+      ])
+    )
+
+    test('library-plugin', (doneTest) ->
+      testTitle = @test.title
+
+      async.series([
+        (done) ->
+          console.log('build')
+
+          configReset()
+
+          all.task.library({
+            isPlugin: true
+            base: base
+            dependencies: [
+              {
+                name: 'knockout'
+                param: 'ko'
+              }
+              {
+                name: 'is-an'
+                param: 'isAn'
+              }
+            ]
+          })
+          .on('end', () -> done())
+          return
+
+        (done) ->
+          console.log('validate')
+
+          assert.compareDir(
+            path.resolve(all.config.output.base, all.config.output.dist)
+            path.join(__dirname, 'expected-results', testTitle, all.config.output.dist)
+          )
+
+          done()
+          return
+
+        (done) ->
+          console.log('clean')
+
+          all.task.clean()
+          .on('finish', () -> done()) # not sure why 'end' doesn't work here
+
+          return
+
+        (done) ->
+          console.log('validate')
+
+          for name, filePath of all.config.output when name != 'base'
+            assert.isFalse(fs.existsSync(path.join(all.config.output.base, filePath)))
+
+          done()
+          return
+
+        (done) ->
+          done()
+          doneTest()
+          return
+      ])
+    )
+
+    test('library', (doneTest) ->
+      testTitle = @test.title
+
+      async.series([
+        (done) ->
+          console.log('build')
+
+          configReset()
+
+          all.task.library({
+            isPlugin: false
+            base: base
+          })
+          .on('end', () -> done())
+          return
+
+        (done) ->
+          console.log('validate')
+
+          assert.compareDir(
+            path.resolve(all.config.output.base, all.config.output.dist)
+            path.join(__dirname, 'expected-results', testTitle, all.config.output.dist)
+          )
+
+          done()
+          return
+
+        (done) ->
+          done()
+          doneTest()
+          return
+      ])
+    )
   )
 
-  test('library-plugin', (doneTest) ->
-    testTitle = @test.title
+  suite('test', () ->
+    test('test node', (doneTest) ->
+      @timeout(20*1000)
 
-    async.series([
-      (done) ->
-        console.log('build')
+      async.series([
+        (done) ->
+          all.task.test.node({
+          })
+          .on('end', () -> done())
+          return
 
-        configReset()
-        #all.config.output.base = path.join('../../build/test', libraryPath)
+        (done) ->
+          done()
+          doneTest()
+          return
+      ])
+    )
 
-        all.task.library({
-          isPlugin: true
-          base: base
-          dependencies: [
-            {
-              name: 'knockout'
-              param: 'ko'
-            }
-            {
-              name: 'is-an'
-              param: 'isAn'
-            }
-          ]
-        })
-        .on('end', () -> done())
+    test('test client', (doneTest) ->
+      @timeout(20*1000)
 
-      (done) ->
-        console.log('validate')
+      async.series([
+        (done) ->
+          all.task.test.client({
+          })
+          .on('end', () -> done())
+          return
 
-        assert.compareDir(
-          path.resolve(all.config.output.base, all.config.output.dist)
-          path.join(__dirname, 'expected-results', testTitle, all.config.output.dist)
-        )
+        (done) ->
+          done()
+          doneTest()
+          return
+      ])
+    )
 
-        done()
-        return
-
-      (done) ->
-        console.log('clean')
-
-        all.task.clean()
-        .on('finish', () -> done()) # not sure why 'end' doesn't work here
-
-        return
-
-      (done) ->
-        console.log('validate')
-
-        for name, filePath of all.config.output when name != 'base'
-          assert.isFalse(fs.existsSync(path.join(all.config.output.base, filePath)))
-
-        done()
-        return
-
-      (done) ->
-        done()
-        doneTest()
-        return
-    ])
+    test('dummy', () ->
+    )
   )
 
-  test('library', (doneTest) ->
-    testTitle = @test.title
-
-    async.series([
-      (done) ->
-        console.log('build')
-
-        configReset()
-        #all.config.output.base = path.join('../../build/test', libraryPath)
-
-        all.task.library({
-          isPlugin: false
-          base: base
-        })
-        .on('end', () -> done())
-
-      (done) ->
-        console.log('validate')
-
-        assert.compareDir(
-          path.resolve(all.config.output.base, all.config.output.dist)
-          path.join(__dirname, 'expected-results', testTitle, all.config.output.dist)
-        )
-
-        done()
-        return
-
-      (done) ->
-        done()
-        doneTest()
-        return
-    ])
-  )
-
-  test('coverage', (doneTest) ->
-    @timeout(20*1000)
-
-    async.series([
-      (done) ->
-        all.task.test.coverage({
-          mocha: {
-            compilers: 'coffee:coffee-script/register'
-            istanbul: false
-          }
-        })
-        .on('end', () -> done())
-
-      (done) ->
-        done()
-        doneTest()
-        return
-    ])
-  )
-
-  test.only('client', (doneTest) ->
-    @timeout(20*1000)
-
-    async.series([
-      (done) ->
-        all.task.test.client({
-        })
-        .on('end', () -> done())
-
-      (done) ->
-        done()
-        doneTest()
-        return
-    ])
-  )
-
-  test('dummy', () ->
-  )
 
  )

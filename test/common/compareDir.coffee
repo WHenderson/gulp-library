@@ -17,7 +17,6 @@ compareFile = (path1, stat1, path2, stat2, options) ->
 
   if str1 != str2
     console.log(path1, (if str1 == str2 then '==' else '!='), path2)
-    debugger
 
   return str1 == str2
 

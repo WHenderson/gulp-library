@@ -1,4 +1,4 @@
 module.exports = {
-  coverage: require('./coverage')
+  node: require('./node')
   examples: require('./examples')
 }

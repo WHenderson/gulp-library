@@ -6,8 +6,7 @@ module.exports = {
     dist: 'dist'
     build: 'build'
     testing: 'testing'
-    coverage: 'coverage'
-    istanbulConfig: 'istanbul.yml'
+    node: 'coverage'
     base: ''
   }
 
