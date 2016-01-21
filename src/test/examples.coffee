@@ -1,6 +1,8 @@
 path = require('path')
 lib = require('../lib')
 util = require('../util')
+fork = require('child_process').fork
+spawn = require('child_process').spawn
 
 module.exports = util.fnOption(
   {
@@ -10,21 +12,65 @@ module.exports = util.fnOption(
   }
   (options) ->
     options.base ?= util.findPackageRoot()
-    options.spec ?= path.join(options.base, options.name, '**/*.{js,coffee}')
+    options.base = path.resolve(options.base)
+    options.spec ?= path.join(options.base, options.name, '**/*.{js,html}')
 
-    fileNames = lib.util.glob.sync(options.spec, {})
+    filePaths = lib.util.glob.sync(options.spec, {}).map((filePath) -> path.resolve(filePath))
+    filePaths = filePaths.filter((filePath) ->
+      parent = filePath
+      while parent != options.base
+        parent = path.dirname(parent)
+        if filePaths.indexOf(parent + '.html') != -1
+          return false
 
-    isRedundant = (fileName) ->
-      ext = path.extname(fileName)
-      coffeeName = fileName.slice(0, fileName.length - ext.length) + '.coffee'
-      if ext == '.js' and fileNames.indexOf(coffeeName) != -1
-        return true
-      return false
+      return true
+    )
+
+    phantomJsPath = lookup('.bin/phantomjs', true) || lookup('phantomjs/bin/phantomjs', true)
 
     suite(name, () ->
-      for fileName in fileNames when not isRedundant(fileName)
-        test(path.relative(options.base, fileName), () ->
-          require(fileName)
-        )
+      for filePath in filePaths
+        do (filePath) ->
+          test(path.relative(options.base, fileName), (testDone) ->
+            isDone = false
+            if path.extname(filePath) == '.js'
+              fork(filePath)
+              .on('exit', (code) ->
+                if code == 0
+                  if not isDone
+                    isDone = true
+                    testDone()
+                else
+                  if not isDone
+                    isDone = true
+                    testDone(new Error("Executing #{filePath} exited with code #{code}"))
+                return
+              )
+              .on('error', (err) ->
+                if not isDone
+                  isDone = true
+                  testDone(new Error("Error '#{err}' executing #{filePath}"))
+                return
+              )
+            else
+              spawn(phantomJsPath, [path.join(__dirname, '../phantom-example.js'), filePath])
+              .on('exit', (code) ->
+                if code == 0
+                  if not isDone
+                    isDone = true
+                    testDone()
+                else
+                  if not isDone
+                    isDone = true
+                    testDone(new Error("Executing #{filePath} exited with code #{code}"))
+                return
+              )
+              .on('error', (err) ->
+                if not isDone
+                  isDone = true
+                  testDone(new Error("Error '#{err}' executing #{filePath}"))
+                return
+              )
+          )
     )
 )

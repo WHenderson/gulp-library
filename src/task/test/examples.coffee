@@ -1,7 +1,9 @@
 lib = require('../../lib')
 config = require('../../config')
+util = require('../../util')
 
-module.exports = (spec='test/examples.coffee') ->
-  lib.gulp
-  .src(spec, { read: false })
-  .pipe(lib.test.mocha(lib.util.extend({}, config.test.mocha, config.test.mochaExamples)))
+module.exports = util.fnOption(
+  (options) ->
+    # spawn mocha and run examples...
+)
+

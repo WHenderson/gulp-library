@@ -213,6 +213,25 @@ suite('coverage', () ->
       ])
     )
 
+    test('examples', () ->
+      @timeout(30*1000)
+
+      async.series([
+        (done) ->
+          all.task.test.examples({
+          })
+          .pipe(all.pipe.done.sync(() ->
+            done()
+          ))
+          return
+
+        (done) ->
+          done()
+          doneTest()
+          return
+      ])
+    )
+
     test('dummy', () ->
     )
   )

@@ -54,6 +54,7 @@
     "istanbul": "^0.4.1",
     "lazypipe": "^1.0.1",
     "mkdirp": "^0.5.1",
+    "phantomjs": "^1.9.19",
     "through": "^2.3.8",
     "through2": "^2.0.0",
     "through2-map": "^2.0.0",
