@@ -6,7 +6,7 @@ mkdirp = require('mkdirp')
 
 module.exports = (name='coverage', reason) ->
   coverage = global[config.coffeeCoverage.coverageVar]
-  coverageBase = path.resolve(config.output.base, config.output.node, 'parts')
+  coverageBase = path.resolve(config.output.base, config.output.coverage, 'parts')
   coveragePath = path.resolve(coverageBase, name + '.json')
 
   if not coverage?
