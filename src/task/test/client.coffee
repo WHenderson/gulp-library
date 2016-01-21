@@ -89,4 +89,5 @@ module.exports = util.fnOption(
         hooks: path.join(__dirname, '../../../lib/hooks.js')
       }
     }))
+    .pipe(pipe.collectCoverage(options.collectCoverage))
 )

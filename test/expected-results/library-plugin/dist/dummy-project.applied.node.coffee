@@ -9,7 +9,12 @@ else if x == 2
 else
   y = -1
 
-dummyProject = (ko) ->
+dummyProject = (ko, test) ->
+  if test == 'node'
+    return 'nodeTest'
+  else if test == 'client'
+    return 'clientTest'
+
   results = []
   results.push('index.begin.coffee')
 

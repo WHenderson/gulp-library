@@ -23,8 +23,8 @@ module.exports = util.fnOptionLazyPipe(
     .pipe -> pipeDone((done) ->
       lib.gulp
       .src(path.join(config.output.base, config.output.coverage, 'parts', '*.json'))
-      .pipe(combineCoverage(options.combineCoverage))
-      .pipe(lib.gulp.dest(path.join(config.output.base, config.output.coverage)))
+      #.pipe(combineCoverage(options.combineCoverage))
+      #.pipe(lib.gulp.dest(path.join(config.output.base, config.output.coverage)))
       .pipe(lib.test.istanbulReport(options.istanbulReport))
       .pipe(all.pipe.done.sync(() ->
         done()

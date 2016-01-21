@@ -17,8 +17,13 @@ if (x === 1) {
   y = -1;
 }
 
-dummyProject = function(ko) {
+dummyProject = function(ko, test) {
   var results;
+  if (test === 'node') {
+    return 'nodeTest';
+  } else if (test === 'client') {
+    return 'clientTest';
+  }
   results = [];
   results.push('index.begin.coffee');
   results.push('inner/index.coffee');

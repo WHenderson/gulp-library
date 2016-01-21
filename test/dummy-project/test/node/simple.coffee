@@ -1,3 +1,3 @@
 test('dummy', () ->
-  console.log(dummyProject)
+  dummyProject({}, 'node')
 )
