@@ -1,85 +1,38 @@
+extend = require('extend')
+config = require('./library.config.coffee')
 cson = require('cson')
+coffeeScript = require('coffee-script')
 path = require('path')
+fs = require('fs')
 
-module.exports = {
-  output: {
-    dist: 'dist'
-    build: 'build'
-    testing: 'testing'
-    coverage: 'coverage'
-    base: ''
-  }
+override = do ->
+  findPackageRoot = require('../util/find-package-root')
+  root = findPackageRoot()
 
-  glob: {
-    coffeeScript: '*.coffee'
-    jade: '*.jade'
-    javaScript: '*.js'
-    cson: '*.cson'
-  }
+  exists = (fn) ->
+    try
+      fs.statSync(fn)
+      return true
+    catch ex
+      if ex.code == 'ENOENT'
+        return false
+      throw ex
 
-  nodeGlobals: {
-  }
-  nodeGlobalsDebug: {
-  }
-  webGlobals: {
-  }
+  if exists(path.join(root, 'library.config.coffee'))
+    # note that coffee-script must have been registered for this to work
+    try
+      global.config = config
+      return require(path.join(root, 'library.config.coffee'))
+    finally
+      delete global.config
+  else if exists(path.join(root, 'library.config.cson'))
+    return cson.parse(fs.readFileSync(path.join(root, 'library.config.cson'), 'utf8'))
+  else if exists(path.join(root, 'library.config.json'))
+    return JSON.parse(fs.readFileSync(path.join(root, 'library.config.json'), 'utf8'))
+  else
+    return {}
 
-  mocha: {
-    debugBrk: false
-    R: 'spec'
-    u: 'tdd'
-    istanbul: false
-  }
+module.exports = extend(true, config, override)
 
-  istanbulConfig: {
-    verbose: true
-    instrumentation: {
-      variable: '_$istanbul'
-    }
-  }
 
-  lintCoffeeScript: cson.load(path.join(__dirname, './coffee-script.cson'))
 
-  umd: {
-    templateName: undefined
-    templateSource: undefined
-
-    exports: (file) ->
-      file.data.exports
-    namespace: (file) ->
-      file.data.namespace
-    dependencies: (file) ->
-      file.data.dependencies
-  }
-
-  coffeeScript: {
-    bare: true
-  }
-
-  coffeeCoverage: {
-    instrumentor: 'istanbul'
-    coverageVar: '_$istanbul'
-  }
-
-  jade: {
-    pretty: true
-    data: {
-      jadeMochaTemplate: path.join(__dirname, '../../task/test/templates/mocha.jade')
-    }
-  }
-
-  cson: {
-
-  }
-}
-
-# /dist/package-name.apply.*
-# /dist/package-name.applied.*
-# /dist/package-name.coverage.*
-# /test/node/**/*.{coffee,js}
-# /test/web/name/index.{jade|html}
-# /test/web/name/**/*.[coffee,js}
-
-# built tests...
-
-# /build/web/...
