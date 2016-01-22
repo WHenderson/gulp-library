@@ -17,15 +17,8 @@ page.onCallback = (data) ->
 
   return
 
-page.onConsoleMessage = (msg, lineNum, sourceId) ->
-  if lineNum? or sourceId?
-    lineNum ?= 'unknown'
-    sourceId ?= 'sourceId'
-    loc = " (#{lineNum}:#{sourceId})"
-  else
-    loc = ''
-
-  console.log("CONSOLE: #{msg}#{loc}")
+page.onConsoleMessage = (msg) ->
+  console.log(msg)
   return
 
 page.open(args[1], (status) ->
