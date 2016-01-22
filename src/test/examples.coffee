@@ -12,7 +12,6 @@ lookup = (filePath, isExecutable) ->
     absPath = path.join(modulePath, filePath)
     if isExecutable and process.platform == 'win32'
       absPath += '.cmd'
-    console.log(absPath, '?')
     if fs.existsSync(absPath)
       return absPath
   return
@@ -28,8 +27,6 @@ module.exports = util.fnOption(
     options.base ?= config.testExamples?.base ? util.findPackageRoot()
     options.spec ?= config.testExamples?.spec ? '**/*.{js,html}'
     options.base = path.resolve(options.base)
-
-    console.log('looking for tests:', path.join(options.base, options.name, options.spec))
 
     filePaths = lib.util.glob.sync(path.join(options.base, options.name, options.spec), {}).map((filePath) -> path.resolve(filePath))
     filePaths = filePaths.filter((filePath) ->

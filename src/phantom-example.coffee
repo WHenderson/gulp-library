@@ -2,7 +2,9 @@ page = require('webpage').create()
 args = require('system').args
 
 page.onCallback = (data) ->
-  if typeof data == 'string'
+  if not data?
+    data = {}
+  else if typeof data == 'string'
     data = { message: data }
 
   if data.message?
