@@ -166,7 +166,7 @@ suite('coverage', () ->
   )
 
   suite('test', () ->
-    test('test node', (doneTest) ->
+    test('node', (doneTest) ->
       @timeout(30*1000)
 
       async.series([
@@ -176,7 +176,6 @@ suite('coverage', () ->
           .pipe(all.lib.pipe.through2.obj(
             (file) -> file
             (cb) ->
-              console.log('hmm')
               cb()
           ))
           .pipe(all.pipe.done.sync(() ->
@@ -191,7 +190,7 @@ suite('coverage', () ->
       ])
     )
 
-    test('test client', (doneTest) ->
+    test('client', (doneTest) ->
       @timeout(30*1000)
 
       async.series([
@@ -213,7 +212,7 @@ suite('coverage', () ->
       ])
     )
 
-    test.only('examples', () ->
+    test('examples', (doneTest) ->
       @timeout(30*1000)
 
       async.series([
@@ -230,9 +229,8 @@ suite('coverage', () ->
           doneTest()
           return
       ])
-    )
 
-    test('dummy', () ->
+      return
     )
   )
 

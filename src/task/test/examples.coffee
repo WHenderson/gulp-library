@@ -6,18 +6,15 @@ path = require('path')
 module.exports = util.fnOption(
   {
     mocha: {
-      compilers: ' '
+      compilers: 'coffee:coffee-script/register'
       istanbul: false
     }
   }
   (options) ->
+    options.mocha = util.mergeOptions(config.mocha, options.mocha)
+
     lib.gulp
-    .src(path.resolve(__dirname, '../../mocha-examples.{js,coffee}'), { read: false, base: require('process').cwd() })
-    .pipe(lib.pipe.through2Map.obj((file) ->
-      debugger
-      return file
-    ))
-    .pipe(lib.debug.debug({ title: 'testing' }))
+    .src(path.resolve(__dirname, '../../mocha-examples.{js,coffee}'), { read: false })
     .pipe(lib.test.mocha(options.mocha))
 )
 
