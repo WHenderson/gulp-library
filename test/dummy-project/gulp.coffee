@@ -20,6 +20,15 @@ tasks = {
         ]
       }
     })
+
+  testNode: () ->
+    all.task.test.node()
+
+  testClient: () ->
+    all.task.test.client()
+
+  testExamples: () ->
+    all.task.test.examples()
 }
 
 all.task.exportTasks(tasks)
