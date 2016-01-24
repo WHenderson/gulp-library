@@ -32,6 +32,7 @@ module.exports = (tasks, { includes, excludes } = {}) ->
     'chained': {
       index: 0
       dep: []
+      skip: ['dist']
     }
     'test': {
       index: 0
@@ -52,6 +53,9 @@ module.exports = (tasks, { includes, excludes } = {}) ->
 
   for name in includes
     for own group, groupDetails of state
+      if groupDetails.skip?.some?((prefix) -> hasPrefix(name, prefix))
+        continue
+
       taskName = ''
       if groupDetails.dep?
         taskName += 'chained-'

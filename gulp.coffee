@@ -26,6 +26,8 @@ tasks = {
       u: 'tdd'
       istanbul: {}
     }))
+
+  distNpm: all.task.dist.npm()
 }
 
 all.task.exportTasks(tasks)
