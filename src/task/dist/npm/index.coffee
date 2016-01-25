@@ -16,7 +16,7 @@ module.exports = util.fnOption(
     options.output = util.mergeOptions(config.output, options.output)
 
     exec = (cmd, args, options, cbDone, cbError) ->
-      if typeof options != object
+      if typeof options != 'object'
         cbError = cbDone
         cbDone = options
         options = {}
@@ -76,7 +76,7 @@ module.exports = util.fnOption(
         (done) ->
           # Ensure no changes
           abort = false
-          exec('git', ['status', '--porcelain'], { stdio: [process.stdin, 'pipe', process.stderr] }, (err) ->
+          child = exec('git', ['status', '--porcelain'], { stdio: [process.stdin, 'pipe', process.stderr] }, (err) ->
             if not err? and abort
               err = new Error('Changes detected. Please ensure the staging area is clean before running')
             if err?
@@ -84,7 +84,7 @@ module.exports = util.fnOption(
             done(err)
             return
           )
-          .on('data', (data) ->
+          child.stdout.on('data', (data) ->
             abort = true
             process.stdout.write(data)
             return
@@ -95,7 +95,7 @@ module.exports = util.fnOption(
         (done) ->
           # Ensure we are committing the master
           name = ''
-          exec('git', ['status', '--porcelain'], { stdio: [process.stdin, 'pipe', process.stderr] }, (err) ->
+          child = exec('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { stdio: [process.stdin, 'pipe', process.stderr] }, (err) ->
             if not err? and name != 'master'
               err = new Error('Current branch is not master. Please only distribute from master.')
             if err?
@@ -103,7 +103,8 @@ module.exports = util.fnOption(
             done(err)
             return
           )
-          .on('data', (data) ->
+
+          child.stdout.on('data', (data) ->
             name += data.toString()
             process.stdout.write(data)
             return
