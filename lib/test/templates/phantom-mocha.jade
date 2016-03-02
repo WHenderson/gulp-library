@@ -1,0 +1,44 @@
+doctype html
+html
+  block head
+    head
+
+      block title
+        title Test Page
+
+      block meta
+        block metaContentType
+          meta(http-equiv="Content-Type",content="text/html; charset=UTF-8")
+        block metaViewport
+          meta(name="viewport",content="width=device-width, initial-scale=1.0")
+
+      block css
+        block cssMocha
+          link(rel='stylesheet', href='./bower_components/mocha/mocha.css')
+
+      block headJs
+        block headJsChai
+          script(src='./bower_components/chai/chai.js')
+          script.
+            var assert = chai.assert;
+
+        block headJsMocha
+          script(src='./bower_components/mocha/mocha.js')
+          script.
+            mocha.setup('!{config.test.mocha.u}')
+
+  block body
+    body
+      block mochaDiv
+        div#mocha
+
+      block bodyJs
+        block bodyJsTests
+          - for testPath in testPaths
+            script(src=testPath)
+        block bodyJsRun
+          script.
+            mocha.run()
+
+
+
