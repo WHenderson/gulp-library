@@ -184,13 +184,23 @@ commands.version = () ->
       exec("git checkout head")
     )
     .then(() ->
-      exec("git add -f \"#{config.output.dist}\"")
+      promise = exec("git add -f \"#{config.output.dist}\"")
+
+      for path in argv._.slice(1)
+        promise = promise.then(() ->
+          exec("git add -f \"#{path}\"")
+        )
+
+      return promise
     )
     .then(() ->
       exec('git commit -m "distribution files"')
     )
     .then(() ->
       exec("git tag -a \"v#{pkg.version}\" -m \"v#{pkg.version} for distribution")
+    )
+    .then(() ->
+      exec('npm publish')
     )
     .then(
       () ->
@@ -202,11 +212,7 @@ commands.version = () ->
     )
   )
   .then(() ->
-    # push up the chain
-    console.log('to propagate this release, run:')
-    console.log('  > git push origin --tags')
-
-    return
+    exec('git push origin --tags')
   )
   .catch((error) ->
     console.log(error)

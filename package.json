@@ -6,7 +6,7 @@
   "scripts": {
     "test": "gulp test",
     "preversion": "coffee src/bin/gulp-library.coffee preversion",
-    "version": "gulp && coffee src/bin/gulp-library.coffee version"
+    "version": "gulp && coffee src/bin/gulp-library.coffee version bower_components"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "lib",
     "bower_components"
   ],
+  "bin": "lib/bin/gulp-library.js",
   "dependencies": {
     "bower": "^1.7.2",
     "chai": "^3.4.1",
