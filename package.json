@@ -1,6 +1,6 @@
 {
   "name": "gulp-library",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "gulp package for creating a client-side library",
   "main": "index.js",
   "scripts": {
