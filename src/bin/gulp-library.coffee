@@ -86,6 +86,7 @@ commands.preversion = () ->
   )
   .catch((error) ->
     console.error(error)
+    console.log(error.stack)
     process.exit(1) # signal failure
     return
   )
@@ -210,6 +211,7 @@ commands.version = () ->
   )
   .catch((error) ->
     console.log(error)
+    console.log(error.stack)
 
     # cleanup
 
