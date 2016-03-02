@@ -212,6 +212,9 @@ commands.version = () ->
     )
   )
   .then(() ->
+    exec('git push origin')
+  )
+  .then(() ->
     exec('git push origin --tags')
   )
   .catch((error) ->
