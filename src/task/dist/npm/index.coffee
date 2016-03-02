@@ -7,12 +7,19 @@ util = require('../../../util')
 
 module.exports = util.fnOption(
   {
-    output: {}
+    output: {
+      version: 'patch'
+      message: 'Version %s for distribution'
+    }
     extras: [
       'bower.json'
     ]
   }
   (options) ->
+    # ToDo: add option for bumping major/minor/patch (using npm commands?)
+    # ToDo: mirror attributes from package.json to bower.json
+    # ToDo: Uncomment check for "changed files" for final version
+
     options.output = util.mergeOptions(config.output, options.output)
 
     exec = (cmd, args, options, cbDone, cbError) ->
@@ -75,6 +82,8 @@ module.exports = util.fnOption(
       async.series([
         (done) ->
           # Ensure no changes
+          done()
+          return
           abort = false
           child = exec('git', ['status', '--porcelain'], { stdio: [process.stdin, 'pipe', process.stderr] }, (err) ->
             if not err? and abort
@@ -96,7 +105,9 @@ module.exports = util.fnOption(
           # Ensure we are committing the master
           name = ''
           child = exec('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { stdio: [process.stdin, 'pipe', process.stderr] }, (err) ->
+            name = name.replace(/\r\n|\r|\n/, '')
             if not err? and name != 'master'
+              console.log("[#{name}]")
               err = new Error('Current branch is not master. Please only distribute from master.')
             if err?
               console.error(err)
@@ -113,13 +124,15 @@ module.exports = util.fnOption(
           return
 
         (done) ->
+          # Add extras
           if options.extras.length != 0
-            exec('git', ['add'].concat(options.extras), done)
+            exec('git', ['add', '-f'].concat(options.extras), done)
           else
             done()
           return
 
         (done) ->
+          # Add dist folder
           if options.output.dist?
             exec('git', ['add', '-f', path.join(options.output.base, options.output.dist)], done)
           else
@@ -127,33 +140,40 @@ module.exports = util.fnOption(
           return
 
         (done) ->
+          # create temp branch
           exec('git', ['checkout', 'head'], done)
           return
 
         (done) ->
-          exec('git', ['commit', '-m', "Version #{cfgNpm.version} for distribution"], done)
+          # Bump version
+          exec('npm', ['version', options.version, '-m', options.message], done)
           return
 
         (done) ->
-          exec('git', ['tag', '-a', "v#{cfgNpm.version}", '-m', "Add tag #{cfgNpm.version}"], done)
-          return
-
-        (done) ->
-          exec('npm', ['publish'], (err, done) ->
+          # Publish to npm
+          exec('npm', ['publish'], (err) ->
             if err?
               console.error(err)
               console.error('RESETTING')
-              exec('git', ['reset'], () -> done(err))
+              async.series([
+                (cb) ->
+                  exec('git', ['checkout', 'master'], cb)
+                  return
+              ], () -> done(err))
             else
               done(err)
+
+            return
           )
           return
 
         (done) ->
+          # Revert to master branch
           exec('git', ['checkout', 'master'], done)
           return
 
         (done) ->
+          # push changes
           exec('git', ['push', 'origin', '--tags'], done)
           return
 
