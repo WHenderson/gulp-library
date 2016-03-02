@@ -197,7 +197,7 @@ commands.version = () ->
       exec('git commit -m "distribution files"')
     )
     .then(() ->
-      exec("git tag -a \"v#{pkg.version}\" -m \"v#{pkg.version} for distribution")
+      exec("git tag -a \"v#{pkg.version}\" -m \"v#{pkg.version} for distribution\"")
     )
     .then(() ->
       exec('npm publish')
