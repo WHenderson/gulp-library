@@ -4,7 +4,10 @@
   "description": "gulp package for creating a client-side library",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/gulp test"
+    "test": "gulp test",
+    "prepublish": "gulp",
+    "preversion": "coffee lib/bin/gulp-library.coffee preversion",
+    "version": "npm run-script prepublish && coffee lib/bin/gulp-library.coffee version"
   },
   "repository": {
     "type": "git",
