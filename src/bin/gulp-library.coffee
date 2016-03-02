@@ -42,9 +42,9 @@ exec = (command) ->
 
 wrap = (func) ->
   () ->
+    args = arguments
     new Promise((resolve, reject) ->
-      console.log('func:', func.name, '(', arguments, ')')
-      func(arguments..., (err, result) ->
+      func(args..., (err, result) ->
         if err?
           reject(err)
         else
