@@ -13,18 +13,16 @@ suite('coverage', () ->
   configOriginal = undefined
   configReset = () -> resetDeep(global.all.config, configOriginal)
 
+  base = path.join(__dirname, 'dummy-project')
+  cwdOriginal = process.cwd()
   setup(() ->
     # building coverage takes time
     @timeout(30*1000)
 
+    process.chdir(base)
+
     global.all = require('../src')
     configOriginal = all.lib.util.extend(true, {}, all.config)
-  )
-
-  base = path.join(__dirname, 'dummy-project')
-  cwdOriginal = process.cwd()
-  setup(() ->
-    process.chdir(base)
   )
   teardown(() ->
     process.chdir(cwdOriginal)
