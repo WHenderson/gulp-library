@@ -29,8 +29,6 @@ exec = (command) ->
 
       if err?
         reject(err)
-      else if stderr? and stderr != ''
-        reject(new Error("stderr: #{stderr}"))
       else
         resolve(stdout)
 
