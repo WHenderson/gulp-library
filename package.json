@@ -26,6 +26,7 @@
     "chai": "^3.4.1",
     "coffee-coverage": "^0.7.0",
     "coffee-script": "^1.10.0",
+    "colors": "^1.1.2",
     "cson": "^3.0.2",
     "dir-compare": "0.0.2",
     "extend": "^3.0.0",
@@ -59,7 +60,8 @@
     "through": "^2.3.8",
     "through2": "^2.0.0",
     "through2-map": "^2.0.0",
-    "yamljs": "^0.2.4"
+    "yamljs": "^0.2.4",
+    "yargs": "^4.2.0"
   },
   "devDependencies": {
     "async": "^1.5.2",
