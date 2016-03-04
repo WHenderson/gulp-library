@@ -1,3 +1,23 @@
+tasks = require('../../src/task/defaults')
+
+tasks._buildLibraryOptions = {
+  library: {
+    isPlugin: true
+    dependencies: [
+      {
+        param: 'ko'
+        name: 'knockout'
+      }
+      {
+        param: 'isAn'
+        name: 'is-an'
+      }
+    ]
+  }
+}
+tasks.export()
+
+###
 all = require('../../src')
 
 tasks = {
@@ -32,3 +52,4 @@ tasks = {
 }
 
 all.task.exportTasks(tasks)
+###
