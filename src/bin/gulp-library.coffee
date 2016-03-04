@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 argv = require('yargs')
 .usage('Usage: $0 <command> [options]')
 .command('preversion', 'To be run as part of your npm preversion script. Verifies that the working folder is a clean master.')
