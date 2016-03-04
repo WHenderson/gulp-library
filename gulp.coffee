@@ -26,18 +26,6 @@ tasks = {
       u: 'tdd'
       istanbul: {}
     }))
-
-  distNpm: (cb) ->
-    all.task.dist.npm({
-      output: {
-        dist: 'lib'
-      }
-      extras: [
-        'bower_components'
-      ]
-    })(cb)
-
-    return
 }
 
 all.task.exportTasks(tasks)
